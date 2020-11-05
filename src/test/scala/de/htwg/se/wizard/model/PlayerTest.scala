@@ -14,6 +14,12 @@ class PlayerTest extends AnyWordSpec {
         "have a name" in {
           player.name should be("Karl")
       }
+        "and toString should look like" in {
+          player.toString should be("Karl")
+        }
+        "when unapplied" in {
+          Player.unapply(player).get should be ("Karl")
+        }
     }
   }
 }
