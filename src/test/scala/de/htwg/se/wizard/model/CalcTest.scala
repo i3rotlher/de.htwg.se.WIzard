@@ -6,14 +6,22 @@ import org.scalatest.wordspec.AnyWordSpec
 class CalcTest extends AnyWordSpec {// Warum falsch?
   "A card before being played" should{
     val handcards = List(Cards.all_cards(4),Cards.all_cards(19))
-    "Be checked if they are allowed to be Played: When a wizzard was played first eyerything is allowed"in {
+    "Be checked if they are allowed to be Played:" +
+      "When a wizzard was played first eyerything is allowed"in {
       Cards.isPlayable(Cards.all_cards(58), handcards.head, handcards) shouldBe(true)
+    }
+    "A Wizzard or Fool can be played always" in{
+      val samplehand2 =List(Cards.all_cards(2), Cards.all_cards(4),Cards.all_cards(19))
+      Cards.isPlayable(Cards.all_cards(2), samplehand2.head,samplehand2) shouldBe (true)
     }
     "When you don't have the colour everything is allowed to be played" in {
       Cards.isPlayable(Cards.all_cards(5), handcards.head, handcards) shouldBe(true)
     }
     "When you have the colour and don't play it you can't" in {
       Cards.isPlayable(Cards.all_cards(4), handcards.last, handcards) shouldBe(false)
+    }
+    "When you have the colour and play it's allowed" in {
+      Cards.isPlayable(Cards.all_cards(7), handcards.last, handcards) shouldBe(true)
     }
   }
   "After every player played a card the winner of this round is calculated" should{
@@ -32,7 +40,7 @@ class CalcTest extends AnyWordSpec {// Warum falsch?
     }
 
     "When there is no special highest number of the operating colour wins" in {
-      Cards.calcWinner(List(Cards.all_cards(5),Cards.all_cards(6),Cards.all_cards(7),Cards.all_cards(4)),"green") shouldBe(3)
+      Cards.calcWinner(List(Cards.all_cards(5),Cards.all_cards(6),Cards.all_cards(7),Cards.all_cards(9)),"green") shouldBe(3)
     }
   }
 }
