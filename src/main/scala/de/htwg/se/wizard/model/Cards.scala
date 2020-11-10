@@ -71,5 +71,10 @@ case object Cards extends Calc {
       Card(13, "white"),
       Card(13, "blue"),
       Card(13, "red"),
+
+      Card(14, "green"),
+      Card(14, "white"),
+      Card(14, "blue"),
+      Card(14, "red")
     )
 }
