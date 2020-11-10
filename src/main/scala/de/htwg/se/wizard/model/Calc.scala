@@ -12,14 +12,14 @@ trait Calc {
     }
     true
   }
-
+//TODO: Letzte Runde Trupf deaktivieren
   def calcWinner(playedCards: Iterable[Card], trumpColour: String): Int = { //TODO: vlt. List[Card]? Wichtig played Cards muss in der Reihenfolge ichtig playedCards muss in der Reihenfolge in der die Karten gespielt wurden sortiert sein
-    var winner = 0
+    var winner: Int = 0
     var winning_Card = playedCards.head
     if (winning_Card.num == 14) {
       return winner
     }
-    var counter = 0
+    var counter:Int = 0
     for (comp_Card <- playedCards.filterNot(_ == winning_Card)) {
       counter += 1
       if (comp_Card.num == 14) {
@@ -30,7 +30,7 @@ trait Calc {
           winner = counter
           winning_Card = comp_Card
         }
-      } else if (comp_Card.colour == trumpColour) {
+      } else if ((comp_Card.colour == trumpColour) && (winning_Card.num != 0)){
         winner = counter
         winning_Card = comp_Card
       }
