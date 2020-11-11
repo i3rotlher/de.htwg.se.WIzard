@@ -1,6 +1,7 @@
 package de.htwg.se.wizard.model
 
 trait Calc {
+
   def isPlayable(firstPlayed: Card, toPlay: Card, handCards: Iterable[Card]): Boolean = { //TODO: vlt. List[Card]?
     if (toPlay.num == 0 || toPlay.num == 14)
       return true
