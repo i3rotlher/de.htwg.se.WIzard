@@ -1,5 +1,4 @@
 
 
-var total = List[Int](0,0,0,0)
-total = total :+ 6
-print(total)
+var total = List[Int](1,2,3)
+total.indices

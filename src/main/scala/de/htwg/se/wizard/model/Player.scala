@@ -7,7 +7,7 @@ case class Player (name: String, hand: List[Card] = List[Card]()) {
     def showHand(): String = {
         var string = ""
         for (x <- 1 to hand.size) {
-            string += x + " = " + hand(x) + "; "
+            string += x + " = " + hand(x-1) + "; "
         }
         string
     }

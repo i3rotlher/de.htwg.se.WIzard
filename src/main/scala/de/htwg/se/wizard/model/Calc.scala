@@ -2,13 +2,15 @@ package de.htwg.se.wizard.model
 
 trait Calc {
 
-  def isPlayable(firstPlayed: Card, toPlay: Card, handCards: Iterable[Card]): Boolean = {
+  def isPlayable(serve_card: Card, toPlay: Card, handCards: Iterable[Card]): Boolean = {
     if (toPlay.num == 0 || toPlay.num == 14)
       return true
-    if (firstPlayed.colour == toPlay.colour)
+    if (serve_card.colour == toPlay.colour)
+      return true
+    if (serve_card.colour.contains("none"))
       return true
     for (comp_Card <- handCards.filterNot(_ == toPlay)) {
-      if (comp_Card.colour == firstPlayed.colour)
+      if (comp_Card.colour == serve_card.colour)
         return false
     }
     true

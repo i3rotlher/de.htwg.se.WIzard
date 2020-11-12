@@ -13,7 +13,7 @@ case class Gamestate(players:List[Player]=List(), game_table:List[Round]=List())
   def init_Gamestate(players : List[Player]): Gamestate = Gamestate(players)
 
   def calc_mini(played_cards_in_played_order : Iterable[Card], trump : Card, first_player_index: Int): Int = {
-    (Cards.calcWinner(played_cards_in_played_order, trump.colour) + first_player_index) % players.size
+    ((Cards.calcWinner(played_cards_in_played_order, trump.colour) + first_player_index) % players.size)
   }
 
   def generate_Hands(round_nr :Int): Gamestate = {
@@ -21,7 +21,7 @@ case class Gamestate(players:List[Player]=List(), game_table:List[Round]=List())
     var n_playerList = players
     for (i <- 0 until players.size) {
       tmpCard_Tuple = Cards.generateHand(round_nr, tmpCard_Tuple._2)
-      n_playerList = n_playerList :+ Player(players(i).name, tmpCard_Tuple._1)
+      n_playerList = n_playerList.updated(i,Player(players(i).name, tmpCard_Tuple._1))
     }
     Gamestate(n_playerList, game_table)
   }
