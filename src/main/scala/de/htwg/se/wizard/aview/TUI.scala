@@ -81,4 +81,5 @@ case class TUI() {
 
   def begin_round(roundnumber: Int): Unit = println("\n\n\nRunde "+roundnumber+" beginnt!\n\n")
 
+  def card_not_playable(): Unit = println("Diese Karte ist momentan nicht spielbar!")
 }

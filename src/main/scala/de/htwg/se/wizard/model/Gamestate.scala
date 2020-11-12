@@ -13,7 +13,7 @@ case class Gamestate(players:List[Player]=List(), game_table:List[Round]=List())
   def init_Gamestate(players : List[Player]): Gamestate = Gamestate(players)
 
   def calc_mini(played_cards_in_played_order : Iterable[Card], trump : Card, first_player_index: Int): Int = {
-    ((Cards.calcWinner(played_cards_in_played_order, trump.colour) + first_player_index) % players.size)
+    (Cards.calcWinner(played_cards_in_played_order, trump.colour) + first_player_index) % players.size
   }
 
   def generate_Hands(round_nr :Int): Gamestate = {
@@ -27,9 +27,9 @@ case class Gamestate(players:List[Player]=List(), game_table:List[Round]=List())
   }
 
   def calc_total(): List[Int] = {
-    var total = List[Int]()
-    for (x <-0 until players.size) game_table.foreach(round => total = total.updated(x, total(x) + round.results(x)))
-    total
+    val total = Array.fill(players.size){0}
+    for (x <-0 until players.size) game_table.foreach(round => total(x) += round.results(x))
+    total.toList
   }
   def get_Trump_card(player:List[Player]): Card = {
     var usedCards = List[Card]()
@@ -37,5 +37,10 @@ case class Gamestate(players:List[Player]=List(), game_table:List[Round]=List())
       usedCards = usedCards.appendedAll(i.hand)
     }
     Cards.generateHand(1,usedCards)._1.head
+  }
+
+  def playCard(card :Card, player_idx : Int): Gamestate = {
+    val updated_player = players(player_idx).playCard(card)
+    copy(players = players.updated(player_idx, updated_player))
   }
 }
