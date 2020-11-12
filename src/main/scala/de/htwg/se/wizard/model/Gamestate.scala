@@ -19,7 +19,7 @@ case class Gamestate(players:List[Player]=List(), game_table:List[Round]=List())
   def generate_Hands(round_nr :Int): Gamestate = {
     var tmpCard_Tuple = (List[Card](),List[Card]())
     var n_playerList = players
-    for (i <- 0 until players.size) {
+    for (i <- players.indices) {
       tmpCard_Tuple = Cards.generateHand(round_nr, tmpCard_Tuple._2)
       n_playerList = n_playerList.updated(i,Player(players(i).name, tmpCard_Tuple._1))
     }
@@ -28,7 +28,7 @@ case class Gamestate(players:List[Player]=List(), game_table:List[Round]=List())
 
   def calc_total(): List[Int] = {
     val total = Array.fill(players.size){0}
-    for (x <-0 until players.size) game_table.foreach(round => total(x) += round.results(x))
+    for (x <-players.indices) game_table.foreach(round => total(x) += round.results(x))
     total.toList
   }
   def get_Trump_card(player:List[Player]): Card = {

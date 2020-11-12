@@ -61,7 +61,7 @@ case class TUI() {
 
   def get_guesses(game: Gamestate, round_counter: Int): List[Int] = {
     var guessed = List.fill(game.players.size){0}
-    for (i <- 0 until game.players.size) {
+    for (i <- game.players.indices) {
       val active_Player = (round_counter + i - 1) % game.players.size
       printf("\n\n\n\n\n")
       println(game.players(active_Player).showHand())
