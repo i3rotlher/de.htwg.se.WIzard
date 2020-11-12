@@ -2,7 +2,7 @@ package de.htwg.se.wizard.model
 
 trait Calc {
 
-  def isPlayable(firstPlayed: Card, toPlay: Card, handCards: Iterable[Card]): Boolean = { //TODO: vlt. List[Card]?
+  def isPlayable(firstPlayed: Card, toPlay: Card, handCards: Iterable[Card]): Boolean = {
     if (toPlay.num == 0 || toPlay.num == 14)
       return true
     if (firstPlayed.colour == toPlay.colour)
@@ -13,8 +13,8 @@ trait Calc {
     }
     true
   }
-//TODO: Letzte Runde Trupf deaktivieren
-  def calcWinner(playedCards: Iterable[Card], trumpColour: String): Int = { //TODO: vlt. List[Card]? Wichtig played Cards muss in der Reihenfolge ichtig playedCards muss in der Reihenfolge in der die Karten gespielt wurden sortiert sein
+
+  def calcWinner(playedCards: Iterable[Card], trumpColour: String = "none"): Int = {
     var winner: Int = 0
     var winning_Card = playedCards.head
     if (winning_Card.num == 14) {

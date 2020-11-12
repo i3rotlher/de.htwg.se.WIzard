@@ -7,7 +7,7 @@ class CardsTest extends AnyWordSpec {
 
     "all_cards" should {
       "have a the card" in {
-        Cards.all_cards(0) should be(Card(0,"green"))
+        Cards.all_cards(0) should be(Card(0,"none(green)"))
       }
     }
 }
