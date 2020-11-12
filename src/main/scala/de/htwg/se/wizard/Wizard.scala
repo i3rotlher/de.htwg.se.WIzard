@@ -8,11 +8,11 @@ object Wizard {
     var game = Gamestate()
 
 
-    printf("Willkommen zu Wizzard\n")
+    println("Willkommen zu Wizzard\n\n")
     game = tui.createPlayers()
 
     //Anfang For Schleife des Spiels
-    for (round_number <- 1 to (2)) { //60 / game.players.size
+    for (round_number <- 1 to 60 / game.players.size) { //
       tui.begin_round(round_number)
 
       //Karten generieren
