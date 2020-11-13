@@ -18,10 +18,13 @@ object Wizard {
       //Karten generieren
       game = game.generate_Hands(round_number)
 
-      //erzeuge Trumpcard (übrige karte nach hands) und zeige Sie
-      val trumpcard = game.get_Trump_card(game.players)
-      tui.show_Trumpcard(trumpcard)
-      // evtl. if mit letzter runde
+      //setzte trumpcard auf den narren für die letzte runde
+      var trumpcard = Cards.all_cards(0)
+      //erzeuge nur Trumpcard runde 1 bis vorletzte Runde (übrige karte nach hands) und zeige Sie
+      if(round_number != 60/game.players.size){
+        trumpcard = game.get_Trump_card(game.players)
+        tui.show_Trumpcard(trumpcard)
+      }
 
       //anzahl stiche abfragen
       game = game.round_start(tui.get_guesses(game, round_number))

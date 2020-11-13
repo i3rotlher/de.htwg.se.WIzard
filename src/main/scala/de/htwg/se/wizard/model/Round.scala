@@ -12,7 +12,7 @@ case class Round(guessed_tricks: List[Int], results : List[Int] = List.empty) {
         x = (made-guessed).abs*(-10) :: x
     }
     copy(results = x.reverse)
-   //Round(guessed_tricks, results = x.reverse)
+   Round(guessed_tricks, results = x.reverse)
   }
 
   override def toString(): String = ("Tricks guessed " + guessed_tricks + "; Results " + results)

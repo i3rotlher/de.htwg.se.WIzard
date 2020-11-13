@@ -17,12 +17,16 @@ class PlayerTest extends AnyWordSpec {
           player = player.playCard(Cards.all_cards(1))
           player.hand shouldBe(List(Cards.all_cards(0)))
         }
+        "and when the Hand is shown to the user should look like this" in{
+          player.showHand() shouldBe("1 = [Narr, none(green));]")
+        }
         "and toString should look like" in {
           player.toString shouldBe("Karl")
         }
         "when unapplied" in {
           Player.unapply(player).get shouldBe ("Karl", List(Cards.all_cards(0)))
         }
+
     }
   }
 }

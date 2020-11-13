@@ -1,4 +1,4 @@
 
 
-var total = List[Int](1,2,3)
-total.indices
+var total = List[Int]()
+total.head
