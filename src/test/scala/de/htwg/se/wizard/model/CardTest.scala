@@ -16,6 +16,9 @@ class CardTest extends AnyWordSpec {
       "and tOString should look like" in{
         card.toString should be("(1, blue)")
       }
+      "and when used unapply" in {
+       Card.unapply(card) shouldBe Some(1, "blue")
+      }
     }
   }
 }

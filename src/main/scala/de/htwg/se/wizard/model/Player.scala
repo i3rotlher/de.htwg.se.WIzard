@@ -12,5 +12,5 @@ case class Player (name: String, hand: List[Card] = List[Card]()) {
         string
     }
 
-    def playCard(card:Card) = Player(name, hand diff List(card))
+    def playCard(card:Card):Player = Player(name, hand diff List(card))
 }

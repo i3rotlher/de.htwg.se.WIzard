@@ -32,14 +32,14 @@ object Wizard {
       //gewonnene stiche zählen
       val made = Array.fill(game.players.size) {0}
 
-      //ründchenstarter (am anfang roundnumber-1, danach der winner)
+      //ründchenstarter (am anfang round_number-1, danach der winner)
       var mini_starter = round_number - 1
       var mini_cards = List[Card]()
 
       //ründchenanzahl = counter
-      for (mini_round_number <- 0 until round_number) { //alle mini ründchen
+      for (_ <- 0 until round_number) { //alle mini ründchen
         var serve_card = Cards.all_cards(0)
-        for (mini_round_player <- game.players.indices) { //jeses spieler in einem miniründchen
+        for (mini_round_player <- game.players.indices) { //jeder spieler in einem miniründchen
           var not_playable = true
           while (not_playable) {
             val current_player = (mini_starter + mini_round_player) % game.players.size

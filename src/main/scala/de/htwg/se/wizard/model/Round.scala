@@ -15,6 +15,6 @@ case class Round(guessed_tricks: List[Int], results : List[Int] = List.empty) {
    Round(guessed_tricks, results = x.reverse)
   }
 
-  override def toString(): String = ("Tricks guessed " + guessed_tricks + "; Results " + results)
+  override def toString: String = "Tricks guessed " + guessed_tricks + "; Results " + results
 
 }
