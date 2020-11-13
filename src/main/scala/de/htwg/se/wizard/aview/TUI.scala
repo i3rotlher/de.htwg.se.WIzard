@@ -1,7 +1,6 @@
 package de.htwg.se.wizard.aview
 
 import de.htwg.se.wizard.model.{Card, Cards, Gamestate, Player}
-
 import scala.util.{Failure, Success, Try}
 
 case class TUI() {
