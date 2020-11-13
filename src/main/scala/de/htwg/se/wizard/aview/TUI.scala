@@ -22,6 +22,7 @@ case class TUI() {
         fail = false
       }
     }
+    println("\n\n\n\n\n\n\n")
     player.hand(playcard-1)
   }
 
@@ -61,12 +62,13 @@ case class TUI() {
 
   def get_guesses(game: Gamestate, round_counter: Int): List[Int] = {
     var guessed = List.fill(game.players.size){0}
-    for (i <- 0 until game.players.size) {
+    for (i <- game.players.indices) {
       val active_Player = (round_counter + i - 1) % game.players.size
-      printf("\n\n\n\n\n")
-      println(game.players(active_Player).showHand())
+      println("\n\nDeine Karten:")
+      println(game.players(active_Player).showHand()+"\n")
       println(game.players(active_Player).toString + " wie viele Stiche wirst du machen?")
       guessed = guessed.updated(active_Player, getNumber())
+      println("\n\n\n\n\n\n\n")
     }
     guessed
   }
@@ -75,11 +77,11 @@ case class TUI() {
     println("Trumpfkarte: " + trumpcard)
   }
 
-  def mini_ended(winner : Player): Unit = println("\nStich gewonnen von " + winner.toString + "\n\n\n\n\n\n")
+  def mini_ended(winner : Player): Unit = println("Stich gewonnen von " + winner.toString + "!")
 
-  def round_ended(gamestate: Gamestate): Unit = println("\n\nRunde vorbei!!!\n\n" +gamestate.game_table +"\n")
+  def round_ended(gamestate: Gamestate): Unit = println("\n\n- - - - - - - - - Runde vorbei - - - - - - - - -\n\n" +gamestate.game_table)
 
-  def begin_round(roundnumber: Int): Unit = println("\n\n\nRunde "+roundnumber+" beginnt!\n\n")
+  def begin_round(roundnumber: Int): Unit = println("\n\n\n- - - - - - - - Runde "+roundnumber+" beginnt! - - - - - - - - -\n\n")
 
   def card_not_playable(): Unit = println("Diese Karte ist momentan nicht spielbar!")
 }
