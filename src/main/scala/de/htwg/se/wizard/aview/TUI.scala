@@ -7,7 +7,8 @@ import de.htwg.se.wizard.model.{Player,Card,Gamestate}
 
 import scala.util.{Failure, Success, Try}
 
-case class TUI(controller: Controller) extends  Observer{
+class TUI(controller: Controller) extends  Observer{
+
   controller.add(this)
 
   def next_player_Card(player: Player): Card = {
@@ -62,32 +63,40 @@ case class TUI(controller: Controller) extends  Observer{
   }
 
 
-  def get_guesses(game: Gamestate, round_counter: Int): List[Int] = {
-    var guessed = List.fill(game.players.size){0}
-    for (i <- game.players.indices) {
-      val active_Player = (round_counter + i - 1) % game.players.size
+  def get_guesses(): Unit = {
+    var guessed = List.fill(controller.player_amount()){0}
+    for (i <- guessed.indices) {
+      val active_Player = (controller.game.round_number + i - 1) % controller.player_amount()
       println("\n\nDeine Karten:")
-      println(game.players(active_Player).showHand()+"\n")
-      println(game.players(active_Player).toString + " wie viele Stiche wirst du machen?")
+      println(controller.game.players(active_Player).showHand()+"\n")
+      println(controller.game.players(active_Player).toString + " wie viele Stiche wirst du machen?")
       guessed = guessed.updated(active_Player, getNumber)
       println("\n\n\n\n\n\n\n")
     }
-    guessed
+    controller.set_guesses(guessed)
   }
 
   def show_Trumpcard(trumpcard : Card): Unit = {
     println("Trumpfkarte: " + trumpcard)
   }
 
-  override def update(): Unit = {
-
+  def generate_hands(): Unit = {
+    println("Verteile Karten . . .")
+    controller.generate_hands()
   }
+
+  def generate_trump_card(): Unit = controller.set_trump_card()
+
+  // wichtig: welche daten darf der View haben ? Wenn Spieler 1 dran ist darf er nicht die Karten von spieler 2 sehen
+  override def update(): Unit = println(controller.gamestateToString())
 
   def mini_ended(winner : Player): Unit = println("Stich gewonnen von " + winner.toString + "!")
 
-  def round_ended(gamestate: Gamestate): Unit = println("\n\n- - - - - - - - - Runde vorbei - - - - - - - - -\n\n" +gamestate.game_table)
+  def round_finished(): Unit = println("\n\n- - - - - - - - - Runde vorbei - - - - - - - - -\n\n" +controller.get_gametable())
 
-  def begin_round(round_number: Int): Unit = println("\n\n\n- - - - - - - - Runde "+round_number+" beginnt! - - - - - - - - -\n\n")
+  def begin_round(round_number: Int): Unit = {
+    println("\n\n\n- - - - - - - - Runde "+round_number+" beginnt! - - - - - - - - -\n\n")
+  }
 
   def card_not_playable(): Unit = println("Diese Karte ist momentan nicht spielbar!")
 }
