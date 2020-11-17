@@ -1,12 +1,14 @@
 package de.htwg.se.wizard.aview
 
-import java.util.ResourceBundle.Control
 
-import de.htwg.se.wizard.model.{Card, Gamestate, Player}
+import de.htwg.se.wizard.util.Observer
+import de.htwg.se.wizard.control.Controller
+import de.htwg.se.wizard.model.{Player,Card,Gamestate}
 
 import scala.util.{Failure, Success, Try}
 
-case class TUI(control: Control) {
+case class TUI(controller: Controller) extends  Observer{
+  controller.add(this)
 
   def next_player_Card(player: Player): Card = {
     println(player.name + " du bist dran!")
@@ -43,9 +45,7 @@ case class TUI(control: Control) {
 
   def toInt(s: String): Try[Int] = Try(Integer.parseInt(s.trim))
 
-  def createPlayers(): Gamestate = {
-    val game = Gamestate()
-    // abfrage nach spieleranzahl
+  def createPlayers(): Unit = {
     println("Wie viele Spieler wollen spielen ? [3,4,5 oder 6]")
     var playercount = scala.io.StdIn.readLine()
     while (!List("3", "4", "5", "6").contains(playercount)) {
@@ -53,14 +53,14 @@ case class TUI(control: Control) {
       playercount = scala.io.StdIn.readLine()
     }
 
-    var players = List[Player]()
-
+    var players = List[String]()
     for (x <- 1 to playercount.toInt) {
       println("Bitte gib deinen Namen ein Spieler " + x + ":")
-      players = players.appended(Player(scala.io.StdIn.readLine()))
+      players = players.appended(scala.io.StdIn.readLine())
     }
-    game.init_Gamestate(players)
+    controller.create_Players(players)
   }
+
 
   def get_guesses(game: Gamestate, round_counter: Int): List[Int] = {
     var guessed = List.fill(game.players.size){0}
@@ -77,6 +77,10 @@ case class TUI(control: Control) {
 
   def show_Trumpcard(trumpcard : Card): Unit = {
     println("Trumpfkarte: " + trumpcard)
+  }
+
+  override def update(): Unit = {
+
   }
 
   def mini_ended(winner : Player): Unit = println("Stich gewonnen von " + winner.toString + "!")
