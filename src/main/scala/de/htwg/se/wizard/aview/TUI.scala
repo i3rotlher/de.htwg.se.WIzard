@@ -1,9 +1,12 @@
 package de.htwg.se.wizard.aview
 
+import java.util.ResourceBundle.Control
+
 import de.htwg.se.wizard.model.{Card, Gamestate, Player}
+
 import scala.util.{Failure, Success, Try}
 
-case class TUI() {
+case class TUI(control: Control) {
 
   def next_player_Card(player: Player): Card = {
     println(player.name + " du bist dran!")

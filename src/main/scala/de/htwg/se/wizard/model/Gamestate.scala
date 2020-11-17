@@ -16,14 +16,14 @@ case class Gamestate(players:List[Player]=List(), game_table:List[Round]=List())
     (Cards.calcWinner(played_cards_in_played_order, trump.colour) + first_player_index) % players.size
   }
 
-  def generate_Hands(round_nr :Int): Gamestate = {
+  def generate_Hands(round_nr :Int, game:Gamestate): Gamestate = {
     var tmpCard_Tuple = (List[Card](),List[Card]())
-    var n_playerList = players
-    for (i <- players.indices) {
+    var n_playerList = game.players
+    for (i <- game.players.indices) {
       tmpCard_Tuple = Cards.generateHand(round_nr, tmpCard_Tuple._2)
-      n_playerList = n_playerList.updated(i,Player(players(i).name, tmpCard_Tuple._1))
+      n_playerList = n_playerList.updated(i,Player(game.players(i).name, tmpCard_Tuple._1))
     }
-    Gamestate(n_playerList, game_table)
+    Gamestate(n_playerList, game.game_table)
   }
 
   def calc_total(): List[Int] = {
