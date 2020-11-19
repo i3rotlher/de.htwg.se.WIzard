@@ -23,21 +23,11 @@ class Controller(var game: Gamestate) extends Observable {
     game
   }
 
-  def gamestateToString(): String = {
-    game.toString() //IMPLEMENTIEREN !!!
-  }
-
   def generate_hands(round_number: Int, players: List[Player]): Gamestate = {
     game = game.generate_Hands(round_number, players)
     notify_Observer("generated_hands")
     game
   }
-
-//  def set_guesses(guesses: List[Int]): Gamestate = {
-//    game = game.set_guesses(guesses)
-//    notify_Observer("guesses_set")
-//    game
-//  }
 
   def set_guess(guess: Int): Gamestate = {
     game = game.set_guess(guess)
