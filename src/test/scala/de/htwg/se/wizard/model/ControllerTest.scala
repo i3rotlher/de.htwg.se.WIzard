@@ -26,6 +26,15 @@ class ControllerTest extends AnyWordSpec {
       control = reset_sample_control
       control.player_amount() shouldBe 3
     }
+    "after the round started and the cards are distributed the player makes guesses " in {
+      val tmp_round_list = List[Round](Round(List(0,1,1),List(20,30,-10)),Round(List(0,0,0),List(0,0,0)))//Player 2 wins first round
+      control = new Controller(new Gamestate(player_list,tmp_round_list,1,1,mini_starter_idx = 1))
+      var tmp_game = control.set_guess(4)
+      tmp_game.game_table.last.guessed_tricks(1) shouldBe(4)
+
+      control = new Controller(new Gamestate(player_list,tmp_round_list,1,0,mini_starter_idx = 1))
+      tmp_game = control.set_guess(4)
+    }
     "depending on the round number it generate the playercards (1 in round one and 2 in round two etc.)" in {
       control = reset_sample_control
       control.generate_hands(1, control.game.players)
@@ -41,12 +50,14 @@ class ControllerTest extends AnyWordSpec {
     }
 
     "their is also a check if a player can play their card" in {
-      var player = new Player("Bob", List(Cards.all_cards(4),Cards.all_cards(5),Cards.all_cards(6)))
-      control = reset_sample_control_state_2
-      control.card_playable(player,player.hand(0),Cards.all_cards(8)) shouldBe(true)
-      player = new Player("Bob", List(Cards.all_cards(4),Cards.all_cards(5),Cards.all_cards(6)))
-      control = reset_sample_control_state_2
-      control.card_playable(player,player.hand(0),Cards.all_cards(9)) shouldBe(false)
+      val tmp_player_list = List[Player](new Player("Karl"), new Player("Bob", List(Cards.all_cards(4),Cards.all_cards(5),Cards.all_cards(6))), new Player("Otto"))
+      control = new Controller( new Gamestate(tmp_player_list,sample_game_tabel,1,1,mini_starter_idx = 1))
+      control.card_playable(control.game.players(1),control.game.players(1).hand(0),Cards.all_cards(8)) shouldBe(true)
+
+      val tmp_player_list1= List[Player](new Player("Karl"), new Player("Bob", List(Cards.all_cards(4),Cards.all_cards(5),Cards.all_cards(6))), new Player("Otto"))
+      control = new Controller( new Gamestate(tmp_player_list1,sample_game_tabel,1,1,mini_starter_idx = 1))
+
+      control.card_playable(control.game.players(1),control.game.players(1).hand(0),Cards.all_cards(9)) shouldBe(false)
 
     }
     "you can play a round" in{
@@ -70,11 +81,11 @@ class ControllerTest extends AnyWordSpec {
       control = reset_sample_control_state_2
       control.get_mini_winner() shouldBe (control.game.players(1))
     }
-    "take away the players card when playcard is called" in {
-      var state = reset_sample_control.generate_hands(5,reset_sample_control.game.players)
-      val cont = new Controller(state)
-      val comp_state = cont.play_card(state.players(0).hand(0))
-      comp_state.players(1).hand.contains(state.players(1).hand(0)) shouldBe false
-    }
+//    "take away the players card when playcard is called" in {
+//      var state = reset_sample_control.generate_hands(5,reset_sample_control.game.players)
+//      val cont = new Controller(state)
+//      val comp_state = cont.play_card(state.players(0).hand(0))
+//      comp_state.players(1).hand.contains(state.players(1).hand(0)) shouldBe false
+//    }
   }
 }
