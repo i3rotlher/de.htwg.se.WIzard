@@ -1,7 +1,7 @@
 package de.htwg.se.wizard.util
 
 trait Observer {
-  def update(): Unit
+  def update(status: String): Unit
 }
 
 class Observable {
@@ -11,5 +11,5 @@ class Observable {
 
   def remove(to_remove: Observer): Unit = subscriber = subscriber.filterNot(subscriptions => subscriptions == to_remove)
 
-  def notify_Observer(): Unit = subscriber.foreach(observer => observer.update())
+  def notify_Observer(status: String): Unit = subscriber.foreach(observer => observer.update(status))
 }

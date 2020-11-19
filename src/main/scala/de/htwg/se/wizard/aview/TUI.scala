@@ -1,9 +1,7 @@
 package de.htwg.se.wizard.aview
-
-
 import de.htwg.se.wizard.util.Observer
 import de.htwg.se.wizard.control.Controller
-import de.htwg.se.wizard.model.{Player,Card,Gamestate}
+import de.htwg.se.wizard.model.{Card, Player}
 
 import scala.util.{Failure, Success, Try}
 
@@ -11,16 +9,62 @@ class TUI(controller: Controller) extends  Observer{
 
   controller.add(this)
 
+
+  override def update(status: String): Unit = {
+    status match {
+      case "players_created" =>
+      case "round_started" => println("- - - - - - Round " + controller.game.round_number + " started - - - - - - -")
+        controller.set_guess(get_guess())
+      case "next_guess" =>
+        controller.set_guess(get_guess())
+      case "next_player_card" =>
+        val to_play = next_player_Card(controller.get_player(controller.active_player_idx()))
+        controller.play_card(to_play)
+      case "round_over" =>
+        println("Trick won by " + controller.get_mini_winner().name + "!")
+        println("Round " + controller.game.round_number + " has ended!\n" + controller.game.game_table + "\n\n\n")
+      case "card_not_playable" =>
+        println("This card is not playable right now!")
+        val to_play = next_player_Card(controller.get_player(controller.active_player_idx()))
+        controller.play_card(to_play)
+      case "guesses_set" =>
+        val to_play = next_player_Card(controller.get_player(controller.active_player_idx()))
+        controller.play_card(to_play)
+      case "mini_over" =>
+        println("Trick won by " + controller.get_mini_winner().name + "!")
+        val to_play = next_player_Card(controller.get_player(controller.active_player_idx()))
+        controller.play_card(to_play)
+      case "game_started" => createPlayers()
+      case _ => println("case unimplemented: " + status )
+    }
+
+  }
+
+  def createPlayers(): Unit = {
+    println("How many players want to play ? [3,4,5 or 6]")
+    var playercount = scala.io.StdIn.readLine()
+    while (!List("3", "4", "5", "6").contains(playercount)) {
+      println("There may only be 3,4,5 or 6 players!")
+      playercount = scala.io.StdIn.readLine()
+    }
+
+    var players = List[String]()
+    for (x <- 1 to playercount.toInt) {
+      println("Insert your name player " + x + ":")
+      players = players.appended(scala.io.StdIn.readLine())
+    }
+    controller.create_Players(players)
+  }
+
   def next_player_Card(player: Player): Card = {
-    println(player.name + " du bist dran!")
     println(player.showHand())
-    println("Welche Karte soll gespielt werden ?")
+    println("Which card do you want to play ?")
     var fail = true
     var playcard = getNumber
     while (fail) {
       if (!(playcard >= 1 && playcard <= player.hand.size)) {
-        println("Bitte gebe eine gültige Karte ein!")
-        println("Welche Karte soll gespielt werden ?")
+        println("Please insert a correct card number!")
+        println("Which card do you want to play ?")
         println(player.showHand())
         playcard = getNumber
       } else {
@@ -36,9 +80,15 @@ class TUI(controller: Controller) extends  Observer{
     var input = toInt(scala.io.StdIn.readLine())
     while (fail) {
       input match {
-        case Failure(_) => println("Bitte gebe eine gültige Zahl ein!")
+        case Failure(_) => println("Insert a correct number!")
           input = toInt(scala.io.StdIn.readLine())
-        case Success(_) => fail = false
+        case Success(_) =>
+          if (input.get < 0) {
+            println("Insert a correct number (>= 0)!")
+            input = toInt(scala.io.StdIn.readLine())
+          } else {
+            fail = false
+          }
       }
     }
     input.get
@@ -46,57 +96,16 @@ class TUI(controller: Controller) extends  Observer{
 
   def toInt(s: String): Try[Int] = Try(Integer.parseInt(s.trim))
 
-  def createPlayers(): Unit = {
-    println("Wie viele Spieler wollen spielen ? [3,4,5 oder 6]")
-    var playercount = scala.io.StdIn.readLine()
-    while (!List("3", "4", "5", "6").contains(playercount)) {
-      println("Es können nur 3,4,5 oder 6 Spieler spielen!")
-      playercount = scala.io.StdIn.readLine()
-    }
+  def get_guess(): Int = {
 
-    var players = List[String]()
-    for (x <- 1 to playercount.toInt) {
-      println("Bitte gib deinen Namen ein Spieler " + x + ":")
-      players = players.appended(scala.io.StdIn.readLine())
-    }
-    controller.create_Players(players)
+    println(show_trump_card())
+    println("\n\nYour cards:")
+    println(controller.game.players(controller.game.active_Player_idx).showHand()+"\n")
+    println(controller.game.players(controller.game.active_Player_idx).name + " how many tricks are you going to make?")
+    val guessed = getNumber
+    println("\n\n\n\n\n\n\n")
+    guessed
   }
 
-
-  def get_guesses(): Unit = {
-    var guessed = List.fill(controller.player_amount()){0}
-    for (i <- guessed.indices) {
-      val active_Player = (controller.game.round_number + i - 1) % controller.player_amount()
-      println("\n\nDeine Karten:")
-      println(controller.game.players(active_Player).showHand()+"\n")
-      println(controller.game.players(active_Player).toString + " wie viele Stiche wirst du machen?")
-      guessed = guessed.updated(active_Player, getNumber)
-      println("\n\n\n\n\n\n\n")
-    }
-    controller.set_guesses(guessed)
-  }
-
-  def show_Trumpcard(trumpcard : Card): Unit = {
-    println("Trumpfkarte: " + trumpcard)
-  }
-
-  def generate_hands(): Unit = {
-    println("Verteile Karten . . .")
-    controller.generate_hands()
-  }
-
-  def generate_trump_card(): Unit = controller.set_trump_card()
-
-  // wichtig: welche daten darf der View haben ? Wenn Spieler 1 dran ist darf er nicht die Karten von spieler 2 sehen
-  override def update(): Unit = println(controller.gamestateToString())
-
-  def mini_ended(winner : Player): Unit = println("Stich gewonnen von " + winner.toString + "!")
-
-  def round_finished(): Unit = println("\n\n- - - - - - - - - Runde vorbei - - - - - - - - -\n\n" +controller.get_gametable())
-
-  def begin_round(round_number: Int): Unit = {
-    println("\n\n\n- - - - - - - - Runde "+round_number+" beginnt! - - - - - - - - -\n\n")
-  }
-
-  def card_not_playable(): Unit = println("Diese Karte ist momentan nicht spielbar!")
+  def show_trump_card(): String = "Trump-Card: " + controller.game.trump_Card + "\n"
 }
