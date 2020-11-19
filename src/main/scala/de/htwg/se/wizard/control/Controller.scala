@@ -23,6 +23,7 @@ class Controller(var game: Gamestate) extends Observable {
     game
   }
 
+
   def generate_hands(round_number: Int, players: List[Player]): Gamestate = {
     game = game.generate_Hands(round_number, players)
     notify_Observer("generated_hands")
@@ -58,7 +59,7 @@ class Controller(var game: Gamestate) extends Observable {
           game
         }
       } else {
-        game.playCard(want_to_play,  game.players(active_player_idx))
+        game = game.playCard(want_to_play, game.players(active_player_idx))
         notify_Observer("next_player_card")
         game
       }
