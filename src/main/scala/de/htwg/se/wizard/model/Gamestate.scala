@@ -1,13 +1,13 @@
 package de.htwg.se.wizard.model
 
-case class Gamestate(players: List[Player] = List(), game_table: List[Round] = List(), round_number: Int,
+case class Gamestate(players: List[Player] = List(), game_table: List[Round] = List(), round_number: Int = 0,
                      active_Player_idx: Int = 0, trump_Card: Card = Cards.all_cards(0), serve_card: Card = Cards.all_cards(0),
-                     made_tricks: List[Int] = List(), playedCards: List[Card] = List(), mini_starter_idx: Int,
+                     made_tricks: List[Int] = List(), playedCards: List[Card] = List(), mini_starter_idx: Int = 0,
                      mini_played_counter : Int = 0) {
 
   def round_finished(made: Iterable[Int]): Gamestate = {
     val finished_round = game_table.last.madeTricks(made)
-    val new_game_table = game_table.updated(game_table.size - 1, finished_round)
+    val new_game_table = game_table.updated(game_table.size - 1, finished_round).appended(Round(List.fill(players.size){0}))
     copy(game_table = new_game_table, mini_starter_idx = (round_number + 1) % players.size, active_Player_idx = (round_number + 1) % players.size,
       round_number = round_number + 1, made_tricks = List.fill(players.size){0}, mini_played_counter = 0)
   }
@@ -34,13 +34,11 @@ case class Gamestate(players: List[Player] = List(), game_table: List[Round] = L
       tmpCard_Tuple = Cards.generateHand(round_number+1, tmpCard_Tuple._2)
       n_playerList = n_playerList.updated(i, Player(players(i).name, tmpCard_Tuple._1))
     }
-    copy(players = n_playerList, active_Player_idx = round_number % players.size, game_table = game_table.appended(Round(List.fill(players.size){0})))
+    copy(players = n_playerList, active_Player_idx = round_number % players.size)
   }
 
   def calc_total(): List[Int] = {
-    val total = Array.fill(players.size) {
-      0
-    }
+    val total = Array.fill(players.size) {0}
     for (x <- players.indices) game_table.foreach(round => total(x) += round.results(x))
     total.toList
   }

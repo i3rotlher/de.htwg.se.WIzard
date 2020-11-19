@@ -6,7 +6,7 @@ import de.htwg.se.wizard.model._
 
 object Wizard {
 
-  val controller = new Controller(Gamestate(round_number = 0, mini_starter_idx = 0))
+  val controller = new Controller(Gamestate())
   val tui = new TUI(controller)
 
   def main(args: Array[String]): Unit = {
