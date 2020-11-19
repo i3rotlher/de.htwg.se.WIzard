@@ -45,10 +45,10 @@ class Controller(var game: Gamestate) extends Observable {
     val active_player_idx = game.active_Player_idx
     val mini_starter_idx = game.mini_starter_idx
     if (!card_playable(game.players(game.active_Player_idx), want_to_play, game.serve_card)) {
-      notify_Observer("card_not_playable") //--> not playable choose other card , show hand again
+      notify_Observer("card_not_playable")
       game
     } else {
-      if (active_player_idx == mini_starter_idx + player_amount() - 1) { //letzter spieler
+      if (active_player_idx == (mini_starter_idx-1)%player_amount()) {
         game = game.end_mini(game.playedCards, game.trump_Card, game.mini_starter_idx)
         if (game.mini_played_counter == game.round_number + 1) {
           game = game.round_finished(game.made_tricks)
@@ -67,12 +67,7 @@ class Controller(var game: Gamestate) extends Observable {
   }
 
   def card_playable(active_player: Player, want_to_play: Card, serve_card: Card): Boolean = {
-    if (Cards.isPlayable(serve_card, want_to_play, active_player.hand)) {
-      game = game.playCard(want_to_play, active_player)
-      true
-    } else {
-      false
-    }
+    Cards.isPlayable(serve_card, want_to_play, active_player.hand)
   }
 
   def play_round(round_number: Int): Gamestate = {

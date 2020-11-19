@@ -18,7 +18,7 @@ class GamestateTest extends AnyWordSpec {
       "and generate a trumpcard out of the remaining cards" in {
         var game1 = Gamestate().create_players(List(Player("Max"),Player("Niclas"),Player("Prof")))
         game1 = game1.generate_Hands(5, game1.players)
-        game1 = game1.set_Trump_card( game1.players, 5)
+        game1.set_Trump_card( game1.players, 5)
         game1.players.head.hand.contains(game1.trump_Card) shouldBe false
         game1.players(1).hand.contains(game1.trump_Card) shouldBe false
         game1.players(2).hand.contains(game1.trump_Card) shouldBe false

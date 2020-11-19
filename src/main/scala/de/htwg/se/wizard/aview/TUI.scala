@@ -1,11 +1,11 @@
 package de.htwg.se.wizard.aview
 import de.htwg.se.wizard.util.Observer
 import de.htwg.se.wizard.control.Controller
-import de.htwg.se.wizard.model.{Card, Player}
+import de.htwg.se.wizard.model.{Card, Gamestate, Player}
 
 import scala.util.{Failure, Success, Try}
 
-class TUI(controller: Controller) extends  Observer{
+class TUI(controller: Controller) extends Observer{
 
   controller.add(this)
 

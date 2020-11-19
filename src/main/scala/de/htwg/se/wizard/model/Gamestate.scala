@@ -57,10 +57,11 @@ case class Gamestate(players: List[Player] = List(), game_table: List[Round] = L
 
   def playCard(played_card: Card, active_player: Player): Gamestate = {
     val updated_player = players(players.indexOf(active_player)).playCard(played_card)
-    if (active_player == players(mini_starter_idx) || serve_card.num == 0 && played_card.num != 0) {
+    if (players.indexOf(active_player) == mini_starter_idx || serve_card.num == 0 && played_card.num != 0) {
       copy(players = players.updated(players.indexOf(active_player), updated_player), playedCards = playedCards.appended(played_card), serve_card = played_card, active_Player_idx = (active_Player_idx+1)%players.size)
-    } else
+    } else {
       copy(players = players.updated(players.indexOf(active_player), updated_player), playedCards = playedCards.appended(played_card), active_Player_idx = (active_Player_idx+1)%players.size)
+    }
   }
 
 }
