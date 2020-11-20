@@ -48,7 +48,8 @@ class Controller(var game: Gamestate) extends Observable {
       notify_Observer("card_not_playable")
       game
     } else {
-      if (active_player_idx == (mini_starter_idx-1)%player_amount()) {
+      if (active_player_idx == (mini_starter_idx+player_amount()-1)%player_amount()) {
+        game = game.playCard(want_to_play, game.players(active_player_idx))
         game = game.end_mini(game.playedCards, game.trump_Card, game.mini_starter_idx)
         if (game.mini_played_counter == game.round_number + 1) {
           game = game.round_finished(game.made_tricks)

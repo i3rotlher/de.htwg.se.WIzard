@@ -57,6 +57,8 @@ class TUI(controller: Controller) extends Observer{
   }
 
   def next_player_Card(player: Player): Card = {
+    println("Serve_Card: "+ controller.game.serve_card)
+    println("Trump_Card: "+ controller.game.trump_Card)
     println(player.showHand())
     println("Which card do you want to play ?")
     var fail = true
