@@ -58,8 +58,32 @@ class ControllerTest extends AnyWordSpec {
       control = new Controller( new Gamestate(tmp_player_list1,sample_game_tabel,1,1,mini_starter_idx = 1))
 
       control.card_playable(control.game.players(1),control.game.players(1).hand(0),Cards.all_cards(9)) shouldBe(false)
-
     }
+    "when a player is active he can choose a card to play, this will be checked if it's allowed to be played"+
+    "and if it's allowed will be played" in{
+      //darf beliebig spielen
+      var tmp_player_list = List[Player](new Player("Karl"), new Player("Bob", List(Cards.all_cards(4), Cards.all_cards(5), Cards.all_cards(6))), new Player("Otto"))
+      control = new Controller( new Gamestate(tmp_player_list,sample_game_tabel,1,1,mini_starter_idx = 1,serve_card = Cards.all_cards(7)))
+      var tmp_game = control.play_card(Cards.all_cards(4))
+      var tmp_player_list_2 = List[Player](new Player("Karl"), new Player("Bob", List(Cards.all_cards(5), Cards.all_cards(6))), new Player("Otto"))
+      tmp_game shouldBe(new Gamestate(tmp_player_list_2,sample_game_tabel,1,1,mini_starter_idx = 1,serve_card = Cards.all_cards(7)))
+
+
+//      //darf Karte nicht spielen
+//      tmp_player_list = List[Player](new Player("Karl"), new Player("Bob"), new Player("Otto", List(Cards.all_cards(4), Cards.all_cards(5), Cards.all_cards(11))))
+//      control = new Controller( new Gamestate(tmp_player_list,sample_game_tabel,1,1,mini_starter_idx = 1,serve_card = Cards.all_cards(7)))
+//      tmp_game = control.play_card(Cards.all_cards(4))
+//      tmp_player_list_2 =List[Player](new Player("Karl"), new Player("Bob"), new Player("Otto", List(Cards.all_cards(5), Cards.all_cards(6), Cards.all_cards(11))))
+//      tmp_game shouldBe(new Gamestate(tmp_player_list_2,sample_game_tabel,1,1,mini_starter_idx = 1,serve_card = Cards.all_cards(7)))
+
+      //darf spielen und beendet runde
+
+      // darf spielen und beendet minirunde
+    }
+
+
+
+
     "you can play a round" in{
       control = reset_sample_control_state_2
       //wait till we have a different trump card than default trump card
@@ -81,11 +105,5 @@ class ControllerTest extends AnyWordSpec {
       control = reset_sample_control_state_2
       control.get_mini_winner() shouldBe (control.game.players(1))
     }
-//    "take away the players card when playcard is called" in {
-//      var state = reset_sample_control.generate_hands(5,reset_sample_control.game.players)
-//      val cont = new Controller(state)
-//      val comp_state = cont.play_card(state.players(0).hand(0))
-//      comp_state.players(1).hand.contains(state.players(1).hand(0)) shouldBe false
-//    }
   }
 }
