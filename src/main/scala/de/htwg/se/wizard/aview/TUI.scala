@@ -9,7 +9,6 @@ class TUI(controller: Controller) extends Observer{
 
   controller.add(this)
 
-
   override def update(status: String): Unit = {
     status match {
       case "players_created" =>
@@ -47,7 +46,6 @@ class TUI(controller: Controller) extends Observer{
       println("There may only be 3,4,5 or 6 players!")
       playercount = scala.io.StdIn.readLine()
     }
-
     var players = List[String]()
     for (x <- 1 to playercount.toInt) {
       println("Insert your name player " + x + ":")
