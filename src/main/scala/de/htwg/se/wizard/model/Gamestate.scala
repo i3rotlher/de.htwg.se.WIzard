@@ -18,7 +18,9 @@ case class Gamestate(players: List[Player] = List(), game_table: List[Round] = L
     copy(game_table = updated_game_table, active_Player_idx = (active_Player_idx+1)%players.size)
   }
 
-  def create_players(players: List[Player]): Gamestate = Gamestate(players, made_tricks = List.fill(players.size){0})
+  def create_player(player_name: String): Gamestate = {
+    copy(players = players.updated(active_Player_idx, Player(player_name)), active_Player_idx = (active_Player_idx+1) % players.size )
+  }
 
   def end_mini(played_cards_in_played_order: Iterable[Card], trump: Card, first_player_index: Int): Gamestate = {
     val winner_idx = (Cards.calcWinner(played_cards_in_played_order, trump.colour) + first_player_index) % players.size
@@ -48,9 +50,9 @@ case class Gamestate(players: List[Player] = List(), game_table: List[Round] = L
     for (i <- player) {
       usedCards = usedCards.appendedAll(i.hand)
     }
-    var trump = Cards.generateHand(1, usedCards)._1.head
-    if (round_nr == 60 / players.size) {
-      trump = Cards.all_cards(0)
+    var trump = Cards.all_cards(0)
+    if ((round_nr+1) != (60 / players.size)) {
+      trump = Cards.generateHand(1, usedCards)._1.head
     }
     copy(trump_Card = trump)
   }
@@ -62,6 +64,14 @@ case class Gamestate(players: List[Player] = List(), game_table: List[Round] = L
     } else {
       copy(players = players.updated(players.indexOf(active_player), updated_player), playedCards = playedCards.appended(played_card), active_Player_idx = (active_Player_idx+1)%players.size)
     }
+  }
+
+  def wish_trumpcard(color: String): Gamestate = {
+      copy(trump_Card = Card(1, color))
+  }
+
+  def set_player_amount(amount: Int): Gamestate = {
+    copy(players = List.fill(amount)(Player("unkown")), made_tricks = List.fill(amount){0})
   }
 
 }
