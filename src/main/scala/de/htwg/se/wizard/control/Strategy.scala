@@ -41,8 +41,6 @@ class Strategy_playCard(controller: Controller, want_to_play: Card) {
     controller.game
   }
 
-  //controller.
-
   def mini_over = {
     controller.notify_Observer(State.next_player_card)
     controller.game
@@ -60,4 +58,5 @@ class Strategy_playCard(controller: Controller, want_to_play: Card) {
     controller.game = controller.game.playCard(want_to_play, controller.game.players(controller.active_player_idx))
     controller.notify_Observer(State.next_player_card)
   }
+
 }
