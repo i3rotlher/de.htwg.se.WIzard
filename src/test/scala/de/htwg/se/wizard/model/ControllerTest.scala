@@ -67,8 +67,8 @@ class ControllerTest extends AnyWordSpec {
 
       "when a player tries play a unplayable card it shouldnt be played" in {
         val player1 = Player("eins", List[Card](new Card_with_value(1, "yellow"), new Card_with_value(3, "yellow")))
-        val player2 = Player("zwei", List[Card](Card(2, "red"), Card(2, "yellow")))
-        val player3 = Player("drei", List[Card](Card(6, "yellow"), Card(5, "yellow")))
+        val player2 = Player("zwei", List[Card](new Card_with_value(2, "red"), new Card_with_value(2, "yellow")))
+        val player3 = Player("drei", List[Card](new Card_with_value(6, "yellow"), new Card_with_value(5, "yellow")))
         val game = Gamestate(players = List(player1,player2,player3))
         val controller2 = new Controller(game)
         controller2.play_card(player1.hand.head)
@@ -77,9 +77,9 @@ class ControllerTest extends AnyWordSpec {
       }
 
       "when the card is playable and its the last player in the mini round" in {
-        val player1 = Player("eins", List[Card](Card(1, "yellow"), Card(3, "yellow")))
-        val player2 = Player("zwei", List[Card](Card(2, "red"), Card(2, "yellow")))
-        val player3 = Player("drei", List[Card](Card(6, "yellow"), Card(5, "yellow")))
+        val player1 = Player("eins", List[Card](new Card_with_value(1, "yellow"), new Card_with_value(3, "yellow")))
+        val player2 = Player("zwei", List[Card](new Card_with_value(2, "red"), new Card_with_value(2, "yellow")))
+        val player3 = Player("drei", List[Card](new Card_with_value(6, "yellow"), new Card_with_value(5, "yellow")))
         var game = Gamestate(round_number = 3, players = List(player1,player2,player3), made_tricks = List.fill(3){0})
         val controller3 = new Controller(game)
         val old_roundNumber = controller3.game.round_number
@@ -90,9 +90,9 @@ class ControllerTest extends AnyWordSpec {
       }
 
       "when the card is playable and its the last player in the round" in {
-        val player1 = Player("eins", List[Card](Card(1, "yellow"), Card(3, "yellow")))
-        val player2 = Player("zwei", List[Card](Card(2, "red"), Card(2, "yellow")))
-        val player3 = Player("drei", List[Card](Card(6, "yellow"), Card(5, "yellow")))
+        val player1 = Player("eins", List[Card](new Card_with_value(1, "yellow"), new Card_with_value(3, "yellow")))
+        val player2 = Player("zwei", List[Card](new Card_with_value(2, "red"), new Card_with_value(2, "yellow")))
+        val player3 = Player("drei", List[Card](new Card_with_value(6, "yellow"), new Card_with_value(5, "yellow")))
         val game = Gamestate(mini_played_counter = 0, round_number = 0, players = List(player1,player2,player3), made_tricks = List.fill(3){0}, game_table = List(Round(List.fill(3){0})))
         val controller4 = new Controller(game)
         val old_roundNumber = controller4.game.round_number
@@ -112,9 +112,9 @@ class ControllerTest extends AnyWordSpec {
             updated = status; println(status); true
           }
         }
-        val player1 = Player("eins", List[Card](Card(1, "yellow"), Card(3, "yellow")))
-        val player2 = Player("zwei", List[Card](Card(2, "red"), Card(2, "yellow")))
-        val player3 = Player("drei", List[Card](Card(6, "yellow"), Card(5, "yellow")))
+        val player1 = Player("eins", List[Card](new Card_with_value(1, "yellow"), new Card_with_value(3, "yellow")))
+        val player2 = Player("zwei", List[Card](new Card_with_value(2, "red"), new Card_with_value(2, "yellow")))
+        val player3 = Player("drei", List[Card](new Card_with_value(6, "yellow"), new Card_with_value(5, "yellow")))
         val game = Gamestate(mini_played_counter = 19, round_number = 19, players = List(player1,player2,player3), made_tricks = List.fill(3){0}, game_table = List(Round(List.fill(3){0})))
         val controller5 = new Controller(game)
         controller5.add(observer)
