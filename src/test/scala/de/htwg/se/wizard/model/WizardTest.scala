@@ -4,8 +4,8 @@
 //import org.scalatest.wordspec.AnyWordSpec
 //class WizardTest extends  AnyWordSpec {
 //"The Game when started " should {
-//
-//  "be able to tell how many rounds ,when given the playeramount, are going to be played" in{
+//  val wizard = Wizard()
+//  "be able to tell how many rounds ,when given the playeramount, are going to be played" in {
 //    Wizard.number_of_rounds(6) shouldBe (10)
 //  }
 //}

@@ -30,7 +30,7 @@ class TUI(controller: Controller) extends Observer{
       case State.mini_over =>
         println("Trick won by " + controller.get_mini_winner().name + "!");true
       case State.round_over =>
-        println(controller.game.game_table);true
+        println(controller.game.game_table + "\n\n\n");true
       case State.game_over =>
         println("Game Over!")
         println(controller.game.calc_total())
@@ -70,7 +70,7 @@ class TUI(controller: Controller) extends Observer{
   }
 
   def start_round() : Unit = {
-    println("- - - - - Round " + controller.game.round_number+1 + " started - - - - -")
+    println("- - - - - Round " + (controller.game.round_number+1) + " started - - - - -")
     println("Generating hands . . .")
     println("Generating trumpcard . . .\n\n\n")
   }
@@ -78,7 +78,7 @@ class TUI(controller: Controller) extends Observer{
   def wizard_trump(): Unit = {
     println("A wizard has been drawn as the trump card!")
     val player = controller.get_player((controller.active_player_idx()-1+controller.player_amount())%controller.player_amount())
-    println(player.name + "which color do you want to be trump? [red,blue,yellow,green]")
+    println(player.name + " which color do you want to be trump? [red,blue,yellow,green]")
     println("Your cards: " + player.showHand())
   }
 
