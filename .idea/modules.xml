@@ -3,8 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/IdeaProjects.de.htwg.se.Wizard.iml" filepath="$PROJECT_DIR$/.idea/modules/IdeaProjects.de.htwg.se.Wizard.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Software Engeneering.de.htwg.se.Wizard.iml" filepath="$PROJECT_DIR$/.idea/modules/Software Engeneering.de.htwg.se.Wizard.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/de.htwg.se.Wizard.iml" filepath="$PROJECT_DIR$/.idea/modules/de.htwg.se.Wizard.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/de.htwg.se.Wizard-build.iml" filepath="$PROJECT_DIR$/.idea/modules/de.htwg.se.Wizard-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/de.htwg.se.Wizard.project.de.htwg.se.Wizard-build.iml" filepath="$PROJECT_DIR$/.idea/modules/de.htwg.se.Wizard.project.de.htwg.se.Wizard-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/project.de.htwg.se.Wizard-build.iml" filepath="$PROJECT_DIR$/.idea/modules/project.de.htwg.se.Wizard-build.iml" />
     </modules>
   </component>
