@@ -6,7 +6,7 @@ import org.scalatest.wordspec.AnyWordSpec
 class CardTest extends AnyWordSpec {
   "A Card" when {
     "created" should {
-      val card = Card(1, "blue")
+      val card = new Card_with_value(1, "blue")
       "have a number" in {
         card.num should be(1)
       }

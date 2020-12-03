@@ -67,7 +67,7 @@ case class Gamestate(players: List[Player] = List(), game_table: List[Round] = L
   }
 
   def wish_trumpcard(color: String): Gamestate = {
-      copy(trump_Card = Card(1, color))
+      copy(trump_Card = new Card_with_value(1, color))
   }
 
   def set_player_amount(amount: Int): Gamestate = {
