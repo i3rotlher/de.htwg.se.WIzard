@@ -14,7 +14,10 @@ class CardTest extends AnyWordSpec {
         card.colour should be("blue")
       }
       "and tOString should look like" in{
-        card.toString should be("Card: 1, blue")
+        card.toString should be("(1, blue)")
+      }
+      "and when used unapply" in {
+       Card.unapply(card) shouldBe Some(1, "blue")
       }
     }
   }

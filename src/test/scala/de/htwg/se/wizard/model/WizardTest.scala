@@ -1,14 +1,12 @@
-package de.htwg.se.wizard.model
-
-import de.htwg.se.wizard.Wizard
-import org.scalatest.matchers.should.Matchers._
-import org.scalatest.wordspec.AnyWordSpec
-
-class WizardTest extends AnyWordSpec {
-
-    "wizard" should {
-      "return" in {
-        Wizard.main(null) should be()
-      }
-    }
-}
+//import de.htwg.se.wizard._
+//
+//import org.scalatest.matchers.should.Matchers._
+//import org.scalatest.wordspec.AnyWordSpec
+//class WizardTest extends  AnyWordSpec {
+//"The Game when started " should {
+//
+//  "be able to tell how many rounds ,when given the playeramount, are going to be played" in{
+//    Wizard.number_of_rounds(6) shouldBe (10)
+//  }
+//}
+//}
