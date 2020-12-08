@@ -78,7 +78,7 @@ class TUI(controller: Controller) extends Observer{
   def wizard_trump(): Unit = {
     println("A wizard has been drawn as the trump card!")
     val player = controller.get_player((controller.active_player_idx()-1+controller.player_amount())%controller.player_amount())
-    println(player.name + "which color do you want to be trump? [red,blue,yellow,green]")
+    println(player.name + " which color do you want to be trump? [red,blue,yellow,green]")
     println("Your cards: " + player.showHand())
   }
 
