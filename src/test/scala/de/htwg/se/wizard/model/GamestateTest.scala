@@ -80,19 +80,19 @@ class GamestateTest extends AnyWordSpec {
       "have the wished color blue " in {
         var game9 = game
         game9 = game9.wish_trumpcard("blue")
-        game9.trump_Card shouldBe Card(1,"blue")
+        game9.trump_Card shouldBe new Card_with_value(1,"blue")
         game9 = game9.wish_trumpcard("green")
-        game9.trump_Card shouldBe Card(1,"green")
+        game9.trump_Card shouldBe new Card_with_value(1,"green")
         game9 = game9.wish_trumpcard("yellow")
-        game9.trump_Card shouldBe Card(1,"yellow")
+        game9.trump_Card shouldBe new Card_with_value(1,"yellow")
         game9 = game9.wish_trumpcard("red")
-        game9.trump_Card shouldBe Card(1,"red")
+        game9.trump_Card shouldBe new Card_with_value(1,"red")
       }
       "still have the first narr as trump after a narr has been played" in {
         var game10 = game
-        game10 = game10.playCard(Card(0, "blue"), game10.players(game10.active_Player_idx))
-        game10 = game10.playCard(Card(0, "red"), game10.players(game10.active_Player_idx))
-        game10.serve_card shouldBe Card(0, "blue")
+        game10 = game10.playCard(new Card_fool(0, "blue"), game10.players(game10.active_Player_idx))
+        game10 = game10.playCard(new Card_fool(0, "red"), game10.players(game10.active_Player_idx))
+        game10.serve_card shouldBe new Card_fool(0, "blue")
       }
     }
   }

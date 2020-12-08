@@ -5,68 +5,8 @@ import de.htwg.se.wizard.util.Observer
 import org.scalatest.matchers.should.Matchers._
 import org.scalatest.wordspec.AnyWordSpec
 
-class ControllerTest extends AnyWordSpec {
-  "A controller" when {
-
-    "beeing initialized" should {
-      val controller = new Controller(Gamestate())
-      "when called set player amount should have the player list with the given size" in {
-        val controller1 = controller
-        controller1.set_player_amount(3)
-        controller1.game.players.size shouldBe 3
-        val controller2 = controller
-        controller2.set_player_amount(4)
-        controller2.game.players.size shouldBe 4
-        val controller3 = controller
-        controller3.set_player_amount(5)
-        controller3.game.players.size shouldBe 5
-        val controller4 = controller
-        controller3.set_player_amount(6)
-        controller3.game.players.size shouldBe 6
-
-      }
-      "when given a player name should set the players name" in {
-        val controller2 = new Controller(controller.game)
-        controller2.set_player_amount(3)
-        controller2.create_player("Torsten")
-        controller2.game.players(0).name shouldBe "Torsten"
-      }
-      "when given a wished color should set the trumpcard" in {
-        val controller3 = new Controller(controller.game)
-        controller3.wish_trump("red")
-        controller3.game.trump_Card shouldBe new Card_with_value(1, "red")
-      }
-      "when get mini winner is called should return the winner idx" in {
-        val controller4 = new Controller(controller.game)
-        controller4.game.players.indexOf(controller4.get_mini_winner()) shouldBe 0
-      }
-    }
-
-    "already beeing initialized with players" should {
-      val controller = new Controller(Gamestate())
-      controller.set_player_amount(3)
-      controller.create_player("eins")
-      controller.create_player("zwei")
-      controller.create_player("drei")
-      "after start_round has been called" in {
-        val controller1 = new Controller(controller.game)
-        controller1.start_round(1)
-        controller1.game.round_number shouldBe 0
-      }
-      "after set_guess has been called" in {
-        val controller2 = new Controller(controller.game)
-        controller2.start_round(0)
-        controller2.set_guess(2)
-        controller2.game.game_table(0).guessed_tricks(0) shouldBe(2)
-      }
-      "after set_guess has been called by the last player" in {
-        val controller2 = new Controller(controller.game)
-        controller2.start_round(0)
-        controller2.set_guess(1)
-        controller2.set_guess(2)
-        controller2.set_guess(3).active_Player_idx shouldBe 0
-      }
-    }
+class StrategyTest extends AnyWordSpec {
+  "A Strategy" when {
     "created in diffrent szenarios" should {
       val controller = new Controller(Gamestate())
       controller.set_player_amount(3)
