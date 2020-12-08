@@ -14,3 +14,24 @@ case class Player (name: String, hand: List[Card] = List[Card]()) {
 
     def playCard(card:Card):Player = Player(name, hand diff List(card))
 }
+
+
+class Builder() {
+    var name: String = "unkown"
+    var hand: List[Card] = List[Card]()
+
+    def with_name(name: String): Builder = {
+        this.name = name
+        this
+    }
+
+    def with_hand(hand : List[Card]) : Builder = {
+        this.hand = hand
+        this
+    }
+
+    def build(): Player = {
+        Player(name, hand)
+    }
+}
+

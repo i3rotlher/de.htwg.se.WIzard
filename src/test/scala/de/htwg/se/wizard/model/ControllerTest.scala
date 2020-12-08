@@ -14,6 +14,16 @@ class ControllerTest extends AnyWordSpec {
         val controller1 = controller
         controller1.set_player_amount(3)
         controller1.game.players.size shouldBe 3
+        val controller2 = controller
+        controller2.set_player_amount(4)
+        controller2.game.players.size shouldBe 4
+        val controller3 = controller
+        controller3.set_player_amount(5)
+        controller3.game.players.size shouldBe 5
+        val controller4 = controller
+        controller3.set_player_amount(6)
+        controller3.game.players.size shouldBe 6
+
       }
       "when given a player name should set the players name" in {
         val controller2 = new Controller(controller.game)

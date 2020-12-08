@@ -1,6 +1,7 @@
 package de.htwg.se.wizard.model
 
 case object Cards extends Calc with Random {
+
     val all_cards: Array[Card] = Array(
       new Card_fool(0, "none(green)"),
       new Card_fool(0, "none(yellow)"),

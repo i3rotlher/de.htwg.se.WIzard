@@ -1,7 +1,7 @@
 package de.htwg.se.wizard.model
 
 trait Random {
-  def generateHand(round: Int, used: List[Card] = List[Card]()): (List[Card], List[Card]) ={
+  def generateHand(round: Int, used: List[Card] = List[Card]()): (List[Card], List[Card]) = {
     var handCards = List[Card]().empty
     var usedCards = used
     for (_ <- 0 until round) {
@@ -11,8 +11,12 @@ trait Random {
     }
     (handCards, usedCards)
   }
+//  def append(handCards:List[Card], usedCards:List[Card], to_append:Card): (List[Card], List[Card]) ={
+//  handCards to_a= nextCard
+//  }
 }
-
+///*
+//
 //class Random_standard extends Random {
 //  override def generateHand(round: Int, used: List[Card] = List[Card]()): (List[Card], List[Card]) = {
 //    var handCards = List[Card]().empty
@@ -41,14 +45,15 @@ trait Random {
 //
 //class Random_unique_Hand extends Random {
 //  override def generateHand(round: Int, used: List[Card]): (List[Card], List[Card]) = {
-//    var handCards = List[Card]().empty
-//    var usedCards = List[Card]().empty
+//      var handCards = List[Card]()
+//      var usedCards = List[Card]()
 //    for (_ <- 0 until round) {
-//      val nextCard = (Cards.all_cards diff usedCards) (scala.util.Random.between(0, 60 - usedCards.size)
-//      handCards = nextCard :: handCards
-//      usedCards = nextCard :: usedCards
+//      val nextCard = (Cards.all_cards diff usedCards) (scala.util.Random.between(0, 60 - usedCards.size))
+//        handCards = nextCard :: handCards
+//        usedCards = nextCard :: usedCards
 //    }
-//    (handCards,usedCards.appendedAll(used))
+//    (handCards, usedCards.appendedAll(used))
 //
 //  }
 //}
+//*/

@@ -35,8 +35,39 @@ class Controller(var game: Gamestate) extends Observable {
   }
 
   def play_card(want_to_play: Card): Gamestate = {
-    new Strategy_playCard(this, want_to_play)
-    game
+    val active_player_idx = game.active_Player_idx
+    val mini_starter_idx = game.mini_starter_idx
+    if (!card_playable(game.players(game.active_Player_idx), want_to_play, game.serve_card)) {
+      notify_Observer(State.card_not_playable)
+      game
+    } else {
+      if (active_player_idx == (mini_starter_idx+player_amount()-1)%player_amount()) {
+        game = game.playCard(want_to_play, game.players(active_player_idx))
+        game = game.end_mini(game.playedCards, game.trump_Card, game.mini_starter_idx)
+        notify_Observer(State.mini_over)
+        if (game.mini_played_counter == game.round_number + 1) {
+          if (game.round_number + 1 == 60/player_amount()) {
+            game = game.round_finished(game.made_tricks)
+            notify_Observer(State.round_over)
+            notify_Observer(State.game_over)
+            game
+          } else {
+            game = game.round_finished(game.made_tricks)
+            notify_Observer(State.round_over)
+            notify_Observer(State.start_round)
+            start_round(game.round_number)
+            game
+          }
+        } else {
+          notify_Observer(State.next_player_card)
+          game
+        }
+      } else {
+        game = game.playCard(want_to_play, game.players(active_player_idx))
+        notify_Observer(State.next_player_card)
+        game
+      }
+    }
   }
 
   def card_playable(active_player: Player, want_to_play: Card, serve_card: Card): Boolean = {
