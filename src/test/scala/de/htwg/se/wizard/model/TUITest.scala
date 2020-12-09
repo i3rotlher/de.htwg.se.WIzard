@@ -11,7 +11,7 @@ class TUITest extends AnyWordSpec {
   "The TUI" should {
 
     val controller = new Controller(Gamestate())
-    controller.set_player_amount(3)
+    controller.set_player_amount(Some(3))
     val tui = new TUI(controller)
 
     "have the state after the update is called" in {

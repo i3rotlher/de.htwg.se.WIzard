@@ -12,24 +12,44 @@ class ControllerTest extends AnyWordSpec {
       val controller = new Controller(Gamestate())
       "when called set player amount should have the player list with the given size" in {
         val controller1 = controller
-        controller1.set_player_amount(3)
+        controller1.set_player_amount(Some(3))
         controller1.game.players.size shouldBe 3
         val controller2 = controller
-        controller2.set_player_amount(4)
+        controller2.set_player_amount(Some(4))
         controller2.game.players.size shouldBe 4
         val controller3 = controller
-        controller3.set_player_amount(5)
+        controller3.set_player_amount(Some(5))
         controller3.game.players.size shouldBe 5
         val controller4 = controller
-        controller3.set_player_amount(6)
+        controller3.set_player_amount(Some(6))
         controller3.game.players.size shouldBe 6
 
       }
+      "when invoked with a None to player_amount have choose the Option none" in {
+        val controller1 = new Controller(Gamestate())
+        controller1.set_player_amount(None)
+        controller1.player_amount() shouldBe 0
+      }
       "when given a player name should set the players name" in {
         val controller2 = new Controller(controller.game)
-        controller2.set_player_amount(3)
+        controller2.set_player_amount(Some(3))
         controller2.create_player("Torsten")
         controller2.game.players(0).name shouldBe "Torsten"
+      }
+      "when given a player and undo is invoked should reset the name" in {
+        val controller2 = new Controller(controller.game)
+        controller2.set_player_amount(Some(3))
+        controller2.create_player("Torsten")
+        controller2.undo_player
+        controller2.game.players(controller2.game.active_Player_idx).name shouldBe "unkown"
+      }
+      "when given a player, and undo has been alled and redo is beeing called should have the name again" in {
+        val controller2 = new Controller(controller.game)
+        controller2.set_player_amount(Some(3))
+        controller2.create_player("Torsten")
+        controller2.undo_player
+        controller2.redo_player
+        controller2.game.players(controller2.game.active_Player_idx-1).name shouldBe "Torsten"
       }
       "when given a wished color should set the trumpcard" in {
         val controller3 = new Controller(controller.game)
@@ -44,7 +64,7 @@ class ControllerTest extends AnyWordSpec {
 
     "already beeing initialized with players" should {
       val controller = new Controller(Gamestate())
-      controller.set_player_amount(3)
+      controller.set_player_amount(Some(3))
       controller.create_player("eins")
       controller.create_player("zwei")
       controller.create_player("drei")
@@ -69,7 +89,7 @@ class ControllerTest extends AnyWordSpec {
     }
     "created in diffrent szenarios" should {
       val controller = new Controller(Gamestate())
-      controller.set_player_amount(3)
+      controller.set_player_amount(Some(3))
       controller.create_player("eins")
       controller.create_player("zwei")
       controller.create_player("drei")
