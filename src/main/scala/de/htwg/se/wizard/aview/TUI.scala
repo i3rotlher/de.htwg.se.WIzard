@@ -17,8 +17,9 @@ class TUI(controller: Controller) extends Observer{
       case State.Wizard_trump => wizard_trump();true
       case State.set_Wizard_trump => state = status;true
       case State.player_create =>
-        println("Player " + controller.active_player_idx() + " whats your name ?")
+        println("Player " + (controller.active_player_idx()+1) + " whats your name ? / press r to undo previous name / press y to redo change")
         state = status;true
+      case State.name_ok => state = status; true
       case State.next_guess =>
         guess()
         state = status;true
@@ -61,16 +62,20 @@ class TUI(controller: Controller) extends Observer{
       println("There may only be 3,4,5 or 6 players!")
       return -1
     }
-    controller.set_player_amount(input.toInt)
+    controller.set_player_amount(Some(input.toInt))
     input.toInt
   }
 
   def create_player(input: String): Unit = {
-    controller.create_player(input)
+    input match {
+      case "y" => controller.redo_player()
+      case "r" => controller.undo_player()
+      case _ => controller.create_player(input)
+    }
   }
 
   def start_round() : Unit = {
-    println("- - - - - Round " + controller.game.round_number+1 + " started - - - - -")
+    println("- - - - - Round " + (controller.game.round_number+1) + " started - - - - -")
     println("Generating hands . . .")
     println("Generating trumpcard . . .\n\n\n")
   }
@@ -78,7 +83,7 @@ class TUI(controller: Controller) extends Observer{
   def wizard_trump(): Unit = {
     println("A wizard has been drawn as the trump card!")
     val player = controller.get_player((controller.active_player_idx()-1+controller.player_amount())%controller.player_amount())
-    println(player.name + "which color do you want to be trump? [red,blue,yellow,green]")
+    println(player.name + " which color do you want to be trump? [red,blue,yellow,green]")
     println("Your cards: " + player.showHand())
   }
 

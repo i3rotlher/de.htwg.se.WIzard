@@ -9,7 +9,7 @@ class StrategyTest extends AnyWordSpec {
   "A Strategy" when {
     "created in diffrent szenarios" should {
       val controller = new Controller(Gamestate())
-      controller.set_player_amount(3)
+      controller.set_player_amount(Some(3))
       controller.create_player("eins")
       controller.create_player("zwei")
       controller.create_player("drei")

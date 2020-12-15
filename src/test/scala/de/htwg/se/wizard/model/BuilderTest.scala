@@ -8,7 +8,7 @@ class BuilderTest extends AnyWordSpec {
     val builder = new Builder()
     "created" should {
       "have a name" in {
-        builder.name shouldBe "unkown"
+        builder.name shouldBe "unknown"
       }
       "and have no hand" in {
         builder.hand.isEmpty shouldBe true

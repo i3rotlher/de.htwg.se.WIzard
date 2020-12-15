@@ -1,6 +1,6 @@
 package de.htwg.se.wizard.control
 
-import de.htwg.se.wizard.model.{Card, Cards, Gamestate, Player, Round}
+import de.htwg.se.wizard.model.{Card, Cards, Gamestate, Player}
 import de.htwg.se.wizard.util.Observable
 
 class Controller(var game: Gamestate) extends Observable {
@@ -92,14 +92,22 @@ class Controller(var game: Gamestate) extends Observable {
     game
   }
 
-  def set_player_amount(amount: Int): Gamestate = {
-    game = game.set_player_amount(amount)
-    notify_Observer(State.player_create)
-    game
+  def set_player_amount(amount: Option[Int]): Gamestate = {
+    amount match {
+      case Some(value) =>
+        game = game.set_player_amount(value)
+        notify_Observer(State.player_create)
+        game
+      case None =>
+        game
+    }
   }
 
   def create_player(player_name: String): Gamestate = {
-    game = game.create_player(player_name)
+    val Undo_Player_Name = new Undo_Player_Name(player_name, this)
+    undoManager.doStep(Undo_Player_Name)
+    notify_Observer(State.name_ok)
+
     if (game.active_Player_idx == 0) {
       notify_Observer(State.start_round)
       start_round(game.round_number)
@@ -108,4 +116,15 @@ class Controller(var game: Gamestate) extends Observable {
     notify_Observer(State.player_create)
     game
   }
+
+  def undo_player(): Unit = {
+    undoManager.undoStep()
+    notify_Observer(State.player_create)
+  }
+
+  def redo_player(): Unit = {
+    undoManager.redoStep()
+  }
+
+  val undoManager = new UndoManager()
 }

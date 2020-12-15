@@ -11,7 +11,7 @@ class TUITest extends AnyWordSpec {
   "The TUI" should {
 
     val controller = new Controller(Gamestate())
-    controller.set_player_amount(3)
+    controller.set_player_amount(Some(3))
     val tui = new TUI(controller)
 
     "have the state after the update is called" in {
@@ -27,6 +27,17 @@ class TUITest extends AnyWordSpec {
     }
     "be able to Create a player when given a name" in {
       tui.create_player("Karl")
+      controller.game.players(0).name shouldBe "Karl"
+    }
+    "be able to reset the ceated players name" in {
+      tui.create_player("Karl")
+      tui.create_player("r")
+      controller.game.players(1).name shouldBe "unknown"
+    }
+    "be able to redo a players name" in {
+      tui.create_player("Karl")
+      tui.create_player("r")
+      tui.create_player("y")
       controller.game.players(0).name shouldBe "Karl"
     }
     "return false if a wrong color has been inputed" in {
