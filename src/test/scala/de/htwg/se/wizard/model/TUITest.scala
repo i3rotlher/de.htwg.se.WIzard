@@ -29,6 +29,17 @@ class TUITest extends AnyWordSpec {
       tui.create_player("Karl")
       controller.game.players(0).name shouldBe "Karl"
     }
+    "be able to reset the ceated players name" in {
+      tui.create_player("Karl")
+      tui.create_player("r")
+      controller.game.players(1).name shouldBe "unknown"
+    }
+    "be able to redo a players name" in {
+      tui.create_player("Karl")
+      tui.create_player("r")
+      tui.create_player("y")
+      controller.game.players(0).name shouldBe "Karl"
+    }
     "return false if a wrong color has been inputed" in {
       tui.check_trump_wish("pink") shouldBe false
     }

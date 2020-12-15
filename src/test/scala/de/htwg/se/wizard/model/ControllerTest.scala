@@ -41,7 +41,7 @@ class ControllerTest extends AnyWordSpec {
         controller2.set_player_amount(Some(3))
         controller2.create_player("Torsten")
         controller2.undo_player
-        controller2.game.players(controller2.game.active_Player_idx).name shouldBe "unkown"
+        controller2.game.players(controller2.game.active_Player_idx).name shouldBe "unknown"
       }
       "when given a player, and undo has been alled and redo is beeing called should have the name again" in {
         val controller2 = new Controller(controller.game)

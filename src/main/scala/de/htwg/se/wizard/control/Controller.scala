@@ -1,6 +1,6 @@
 package de.htwg.se.wizard.control
 
-import de.htwg.se.wizard.model.{Card, Cards, Gamestate, Player, Round}
+import de.htwg.se.wizard.model.{Card, Cards, Gamestate, Player}
 import de.htwg.se.wizard.util.Observable
 
 class Controller(var game: Gamestate) extends Observable {
@@ -117,14 +117,14 @@ class Controller(var game: Gamestate) extends Observable {
     game
   }
 
-  def undo_player: Unit = {
-    undoManager.undoStep
+  def undo_player(): Unit = {
+    undoManager.undoStep()
     notify_Observer(State.player_create)
   }
 
-  def redo_player: Unit = {
-    undoManager.redoStep
+  def redo_player(): Unit = {
+    undoManager.redoStep()
   }
 
-  val undoManager = new UndoManager
+  val undoManager = new UndoManager()
 }

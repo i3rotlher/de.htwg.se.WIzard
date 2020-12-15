@@ -1,6 +1,6 @@
 package de.htwg.se.wizard.model
 
-case class Player (name: String = "unkown", hand: List[Card] = List[Card]()) {
+case class Player (name: String = "unknown", hand: List[Card] = List[Card]()) {
 
     override def toString:String = name
 
@@ -17,7 +17,7 @@ case class Player (name: String = "unkown", hand: List[Card] = List[Card]()) {
 
 
 class Builder() {
-    var name: String = "unkown"
+    var name: String = "unknown"
     var hand: List[Card] = List[Card]()
 
     def with_name(name: String): Builder = {

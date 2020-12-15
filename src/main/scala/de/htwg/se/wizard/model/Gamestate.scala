@@ -92,27 +92,25 @@ case class Gamestate(players: List[Player] = List(), game_table: List[Round] = L
   }
 
   override def strategy_3_players(): Gamestate = {
-    copy(players = List.fill(3)(Player("unkown")), made_tricks = List.fill(3) {
+    copy(players = List.fill(3)(Player()), made_tricks = List.fill(3) {
       0
     })
   }
 
   override def strategy_4_players(): Gamestate = {
-    copy(players = List.fill(4)(Player("unkown")), made_tricks = List.fill(4) {
+    copy(players = List.fill(4)(Player()), made_tricks = List.fill(4) {
       0
     })
   }
 
   override def strategy_5_players(): Gamestate = {
-    copy(players = List.fill(5)(Player("unkown")), made_tricks = List.fill(5) {
+    copy(players = List.fill(5)(Player()), made_tricks = List.fill(5) {
       0
     })
   }
 
   override def strategy_6_players(): Gamestate = {
-    copy(players = List.fill(6)(Player("unkown")), made_tricks = List.fill(6) {
-      0
-    })
+    copy(players = List.fill(6)(Player()), made_tricks = List.fill(6) {0})
   }
 
 }
