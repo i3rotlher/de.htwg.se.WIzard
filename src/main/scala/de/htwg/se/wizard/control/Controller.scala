@@ -3,18 +3,20 @@ package de.htwg.se.wizard.control
 import de.htwg.se.wizard.model.{Card, Cards, Gamestate, Player}
 import de.htwg.se.wizard.util.Observable
 
-class Controller(var game: Gamestate) extends Observable {
+import scala.swing.Publisher
+
+class Controller(var game: Gamestate) extends Publisher{
 
   def player_amount(): Int = game.players.size
 
   def set_trump_card(): Gamestate = {
     game = game.set_Trump_card(game.players, game.round_number)
     if (game.trump_Card.num == 14) {
-      notify_Observer(State.Wizard_trump)
-      notify_Observer(State.set_Wizard_trump)
+      publish(new Wizard_trump)
+      publish(new set_Wizard_trump)
       return game
     }
-    notify_Observer(State.next_guess)
+    publish(new next_guess)
     game
   }
 
@@ -26,10 +28,10 @@ class Controller(var game: Gamestate) extends Observable {
   def set_guess(guess: Int): Gamestate = {
     game = game.set_guess(guess)
     if (game.active_Player_idx == game.round_number%player_amount()) {
-      notify_Observer(State.next_player_card)
+      publish(new next_player_card)
       game
     } else {
-      notify_Observer(State.next_guess)
+      publish(new next_guess)
       game
     }
   }
@@ -38,33 +40,33 @@ class Controller(var game: Gamestate) extends Observable {
     val active_player_idx = game.active_Player_idx
     val mini_starter_idx = game.mini_starter_idx
     if (!card_playable(game.players(game.active_Player_idx), want_to_play, game.serve_card)) {
-      notify_Observer(State.card_not_playable)
+      publish(new card_not_playable)
       game
     } else {
       if (active_player_idx == (mini_starter_idx+player_amount()-1)%player_amount()) {
         game = game.playCard(want_to_play, game.players(active_player_idx))
         game = game.end_mini(game.playedCards, game.trump_Card, game.mini_starter_idx)
-        notify_Observer(State.mini_over)
+        publish(new mini_over)
         if (game.mini_played_counter == game.round_number + 1) {
           if (game.round_number + 1 == 60/player_amount()) {
             game = game.round_finished(game.made_tricks)
-            notify_Observer(State.round_over)
-            notify_Observer(State.game_over)
+            publish(new round_over)
+            publish(new game_over)
             game
           } else {
             game = game.round_finished(game.made_tricks)
-            notify_Observer(State.round_over)
-            notify_Observer(State.start_round)
+            publish(new round_over)
+            publish(new start_round)
             start_round(game.round_number)
             game
           }
         } else {
-          notify_Observer(State.next_player_card)
+          publish(new next_player_card)
           game
         }
       } else {
         game = game.playCard(want_to_play, game.players(active_player_idx))
-        notify_Observer(State.next_player_card)
+        publish(new next_player_card)
         game
       }
     }
@@ -88,7 +90,7 @@ class Controller(var game: Gamestate) extends Observable {
 
   def wish_trump(color: String) : Gamestate = {
     game = game.wish_trumpcard(color)
-    notify_Observer(State.next_guess)
+    publish(new next_guess)
     game
   }
 
@@ -96,7 +98,7 @@ class Controller(var game: Gamestate) extends Observable {
     amount match {
       case Some(value) =>
         game = game.set_player_amount(value)
-        notify_Observer(State.player_create)
+        publish(new player_create)
         game
       case None =>
         game
@@ -106,20 +108,20 @@ class Controller(var game: Gamestate) extends Observable {
   def create_player(player_name: String): Gamestate = {
     val Undo_Player_Name = new Undo_Player_Name(player_name, this)
     undoManager.doStep(Undo_Player_Name)
-    notify_Observer(State.name_ok)
+    publish(new name_ok)
 
     if (game.active_Player_idx == 0) {
-      notify_Observer(State.start_round)
+      publish(new start_round)
       start_round(game.round_number)
       return game
     }
-    notify_Observer(State.player_create)
+    publish(new player_create)
     game
   }
 
   def undo_player(): Unit = {
     undoManager.undoStep()
-    notify_Observer(State.player_create)
+    publish(new player_create)
   }
 
   def redo_player(): Unit = {

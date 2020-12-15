@@ -2,11 +2,12 @@ package de.htwg.se.wizard.aview
 import de.htwg.se.wizard.util.Observer
 import de.htwg.se.wizard.control.{Controller, State}
 
+import scala.swing.Reactor
 import scala.util.{Failure, Success, Try}
 
-class TUI(controller: Controller) extends Observer{
+class TUI(controller: Controller) extends Reactor{
 
-  controller.add(this)
+  listenTo(controller)
   var state: State.Value = State.game_started
 
   override def update(status: State.Value): Boolean = {
