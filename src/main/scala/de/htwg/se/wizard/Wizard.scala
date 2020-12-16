@@ -1,8 +1,7 @@
 package de.htwg.se.wizard
-
-import de.htwg.se.sudoku.aview.gui.SwingGUI
 import de.htwg.se.wizard.control._
 import de.htwg.se.wizard.aview.TUI
+import de.htwg.se.wizard.aview.gui.SwingGUI
 import de.htwg.se.wizard.model._
 
 object Wizard {

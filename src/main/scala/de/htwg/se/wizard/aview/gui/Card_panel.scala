@@ -5,6 +5,7 @@ import javax.swing.ImageIcon
 import scala.swing.Label
 
 case class Card_panel(card: Card) extends Label {
+    val label = new Label()
     var imageIcon = new ImageIcon(card_path.get_card_face_path(card))
     val image = imageIcon.getImage()
     val newimg = image.getScaledInstance(200, (703 * 0.441501104).toInt, java.awt.Image.SCALE_SMOOTH)
