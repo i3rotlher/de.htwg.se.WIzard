@@ -107,7 +107,6 @@ class Controller(var game: Gamestate) extends Publisher{
   def create_player(player_name: String): Gamestate = {
     val Undo_Player_Name = new Undo_Player_Name(player_name, this)
     undoManager.doStep(Undo_Player_Name)
-    publish(new name_ok)
 
     if (game.active_Player_idx == 0) {
       publish(new start_round)

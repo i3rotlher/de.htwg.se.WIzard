@@ -11,6 +11,9 @@ class SwingGUI(controller: Controller) extends Frame {
 
   listenTo(controller)
 
+  override def closeOperation(): Unit = {
+    System.exit(-1)
+  }
   title = "Wizard"
 
   var state: Event = new game_started
@@ -23,9 +26,7 @@ class SwingGUI(controller: Controller) extends Frame {
     case event: set_Wizard_trump => state = event
     case event: player_create =>
       set_name(controller.active_player_idx()+1)
-      //println("Player " + (controller.active_player_idx()+1) + " whats your name ? / press r to undo previous name / press y to redo change")
       state = event
-    case event: name_ok => state = event
     case event: next_guess =>
       guess()
       state = event
@@ -43,6 +44,7 @@ class SwingGUI(controller: Controller) extends Frame {
       println(controller.game.calc_total())
       state = event
     case ButtonClicked(b) => println(b.name);processInput(b.name)
+      //Zähler einbauen -> doppelte ausführung vermeiden
     case EditDone(s) => if (s.text != "Enter your name here ..." && s.text != "Enter your guess here ...") {
       println(s.text)
       processInput(s.text)
@@ -149,27 +151,46 @@ class SwingGUI(controller: Controller) extends Frame {
   }
   ////////////////////////////////////////
 
-  def set_name(activeplayer_idx: Int): Unit = {
-    val set_name_panel = new FlowPanel {
-      var label = new Label("Player " + activeplayer_idx + " whats your Name ?")
-      contents += label
-      var text_field = new TextField("Enter your name here ...", 14)
-      val undo_previous = new Button("\u2190") {
-        name = "r"
-      }
-      val redo_change = new Button("\u2192") {
-        name = "y"
-      }
-      contents += undo_previous
-      contents += text_field
-      contents += redo_change
-    }
-    listenTo(set_name_panel.text_field)
-    listenTo(set_name_panel.undo_previous)
-    listenTo(set_name_panel.redo_change)
 
-    contents = set_name_panel
+  // ------------------------------------------------------------------------------------------
+
+  val set_name_panel = new FlowPanel {
+    val label = new Label("Player " + "X" + " whats your Name ?")
+    contents += label
+    val text_field = new TextField("Enter your name here ...", 14)
+    val undo_previous = new Button("\u2190") {
+      name = "r"
+    }
+    val redo_change = new Button("\u2192") {
+      name = "y"
+    }
+    contents += undo_previous
+    contents += text_field
+    contents += redo_change
   }
+
+  listenTo(set_name_panel.undo_previous)
+  listenTo(set_name_panel.text_field)
+  listenTo(set_name_panel.redo_change)
+
+  def set_name(activeplayer_idx: Int): Unit = {
+    set_name_panel.label.text ="Player " + activeplayer_idx + " whats your Name ?"
+    set_name_panel.text_field.text = "Enter your name here ..."
+
+    contents=set_name_panel
+  }
+
+  // ------------------------------------------------------------------------------------------
+
+  def create_player(input: String): Unit = {
+    input match {
+      case "y" => controller.redo_player()
+      case "r" => controller.undo_player()
+      case _ => controller.create_player(input)
+    }
+  }
+
+
 
   def check_Amount(input: String): Int = {
     if (!List("3", "4", "5", "6").contains(input)) {
@@ -178,14 +199,6 @@ class SwingGUI(controller: Controller) extends Frame {
     }
     controller.set_player_amount(Some(input.toInt))
     input.toInt
-  }
-
-  def create_player(input: String): Unit = {
-    input match {
-      case "y" => controller.redo_player()
-      case "r" => controller.undo_player()
-      case _ => controller.create_player(input)
-    }
   }
 
   def start_round() : Unit = {
