@@ -1,7 +1,6 @@
 package de.htwg.se.wizard.model
 
 import de.htwg.se.wizard.control._
-import de.htwg.se.wizard.util.Observer
 import org.scalatest.matchers.should.Matchers._
 import org.scalatest.wordspec.AnyWordSpec
 

@@ -1,11 +1,14 @@
 package de.htwg.se.sudoku.aview.gui
 
-import java.awt.Dimension
-import java.util.concurrent.Flow.Publisher
+
+
+import java.awt.Color
 
 import de.htwg.se.wizard.control._
-import javax.swing.SwingConstants
-import javax.swing.plaf.basic.BasicArrowButton
+import de.htwg.se.wizard.model.Card
+import javax.swing.ImageIcon
+import javax.swing.border.Border
+import javax.swing.plaf.DimensionUIResource
 
 import scala.swing._
 import scala.swing.event._
@@ -104,7 +107,6 @@ class SwingGUI(controller: Controller) extends Frame {
     val redo_change = new Button("\u2192") {
       name = "y"
     }
-
     contents += undo_previous
     contents += text_field
     contents += redo_change
@@ -114,8 +116,70 @@ class SwingGUI(controller: Controller) extends Frame {
   listenTo(set_name_panel.redo_change)
 
 
-  val wish_trump = new FlowPanel {
+//  val wish_trump = new FlowPanel {
+//    var label = new Label()
+//    contents += label
+//
+//    val button_panel = new BoxPanel(Orientation.Vertical) {
+//      val button_red = new Button("Red") {
+//        name = "red"
+//        background = Color.RED
+//      }
+//      val button_yellow = new Button("Yellow") {
+//        name = "yellow"
+//        background = Color.YELLOW
+//      }
+//      val button_green = new Button("Green") {
+//        name = "green"
+//        background = Color.GREEN
+//      }
+//      val button_blue = new Button("Blue") {
+//        name = "blue"
+//        background = Color.BLUE
+//      }
+//    }
+//    val trump_card = new Label {
+//      icon = new ImageIcon(get_card_face_path(controller.game.trump_Card))
+//    }
+//
+//
+//    val player_hand_panel = new BoxPanel(Orientation.Horizontal) {
+//      var table_label = new Label {
+//        text = "Your Hand:"
+//      }
+//      contents += table_label
+//    }
+//
+//    val scroll_pane = new ScrollPane {
+//      contents=player_hand_panel
+//    }
+//
+//
+//    contents+=trump_card
+//    contents+=player_hand_panel
+//    contents+=button_panel.button_red
+//    contents+=button_panel.button_yellow
+//    contents+=button_panel.button_green
+//    contents+=button_panel.button_blue
+//  }
+//  listenTo(wish_trump.button_panel.button_red)
+//  listenTo(wish_trump.button_panel.button_green)
+//  listenTo(wish_trump.button_panel.button_blue)
+//  listenTo(wish_trump.button_panel.button_yellow)
+//
+  def wizard_trump(): Unit = {
+    val player = controller.get_player((controller.active_player_idx()-1+controller.player_amount())%controller.player_amount())
+    println("Your cards: " + player.showHand())
+    val hand = controller.game.players(controller.active_player_idx()).hand
 
+    for (card <- hand) {
+      val card_label = new Label {
+        icon = new ImageIcon(get_card_face_path(card))
+      }
+//      wish_trump.player_hand_panel.contents+=card_label
+    }
+//    wish_trump.label.text = "A wizard has been drawn as the trump card!\n" + player.name + " which color do you want to be trump?"
+//    contents = wish_trump
   }
 
   val set_guess = new FlowPanel {
@@ -172,13 +236,6 @@ class SwingGUI(controller: Controller) extends Frame {
     println("Generating trumpcard . . .\n\n\n")
   }
 
-  def wizard_trump(): Unit = {
-    println("A wizard has been drawn as the trump card!")
-    val player = controller.get_player((controller.active_player_idx()-1+controller.player_amount())%controller.player_amount())
-    println(player.name + " which color do you want to be trump? [red,blue,yellow,green]")
-    println("Your cards: " + player.showHand())
-  }
-
   def check_trump_wish(input: String): Boolean = {
     if(!List("red","green","blue","yellow").contains(input)) {
       println("You may only choose one of these colors red,blue,yellow,green")
@@ -230,6 +287,13 @@ class SwingGUI(controller: Controller) extends Frame {
     } else {
       controller.play_card(active_player.hand(input.toInt-1))
     }
+  }
+
+  def get_card_face_path(card: Card): String = {
+    if (card.colour.contains("none")) {
+      return "C:\\Users\\maxek\\Desktop\\AIN\\Semester 3\\Software Engeneering\\de.htwg.se.Wizard\\Card_faces\\" + (card.colour.substring(card.colour.indexOf("(")+1,card.colour.indexOf("(")+2) + card.num) + ".png"
+    }
+    "C:\\Users\\maxek\\Desktop\\AIN\\Semester 3\\Software Engeneering\\de.htwg.se.Wizard\\Card_faces\\" + (card.colour.substring(0,1) + card.num) + ".png"
   }
 
   visible = true
