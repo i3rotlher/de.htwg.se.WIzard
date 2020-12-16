@@ -1,7 +1,6 @@
 package de.htwg.se.wizard.control
 
 import de.htwg.se.wizard.model.{Card, Cards, Gamestate, Player}
-import de.htwg.se.wizard.util.Observable
 
 import scala.swing.Publisher
 

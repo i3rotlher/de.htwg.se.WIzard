@@ -1,6 +1,7 @@
 package de.htwg.se.wizard
 
-import de.htwg.se.wizard.control.{Controller, State}
+import de.htwg.se.sudoku.aview.gui.SwingGUI
+import de.htwg.se.wizard.control._
 import de.htwg.se.wizard.aview.TUI
 import de.htwg.se.wizard.model._
 
@@ -8,13 +9,14 @@ object Wizard {
 
   val controller = new Controller(Gamestate())
   val tui = new TUI(controller)
+  val gui = new SwingGUI(controller)
 
   def main(args: Array[String]): Unit = {
-    controller.notify_Observer(State.game_started)
+    controller.publish(new game_started)
     do {
       val input = scala.io.StdIn.readLine()
       tui.processInput(input)
-    } while (tui.state != State.game_over)
+    } while (!tui.state.isInstanceOf[game_over])
   }
 
 }

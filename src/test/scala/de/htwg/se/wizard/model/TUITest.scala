@@ -1,11 +1,10 @@
 package de.htwg.se.wizard.model
 import de.htwg.se.wizard.aview.TUI
-import de.htwg.se.wizard.control.{Controller, State}
-import de.htwg.se.wizard.util.{Observable, Observer}
+import de.htwg.se.wizard.control._
 import org.scalatest.matchers.should.Matchers._
 import org.scalatest.wordspec.AnyWordSpec
 
-import scala.util.{Failure, Success, Try}
+import scala.util.Success
 
 class TUITest extends AnyWordSpec {
   "The TUI" should {
@@ -15,9 +14,8 @@ class TUITest extends AnyWordSpec {
     val tui = new TUI(controller)
 
     "have the state after the update is called" in {
-      for (state <- State.values) {
-        tui.update(state) shouldBe true
-      }
+      controller.publish(new game_started)
+      tui.state.isInstanceOf[get_Amount] shouldBe true
     }
     "return -1 on failure when checking the amount input" in {
       tui.check_Amount("7") shouldBe(-1)
@@ -89,8 +87,8 @@ class TUITest extends AnyWordSpec {
 
     }
     "should invoke diffrent matches for each diffrent state it can be" in {
-      for (state <- List(State.get_Amount, State.player_create, State.set_Wizard_trump,
-        State.next_guess, State.next_player_card, State.game_over)) {
+      for (state <- List(new get_Amount, new player_create, new set_Wizard_trump,
+        new next_guess, new next_player_card, new game_over)) {
         tui.state = state
         tui.processInput("bla")
       }
