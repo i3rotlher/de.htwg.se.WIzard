@@ -3,7 +3,6 @@ import java.awt.Color
 
 import de.htwg.se.wizard.control._
 import de.htwg.se.wizard.model.Card
-import javax.swing.ImageIcon
 
 import scala.swing._
 import scala.swing.event._
@@ -52,7 +51,6 @@ class SwingGUI(controller: Controller) extends Frame {
       processInput(s.text)
       s.text = "Enter your name here ..." // zurücksetzten auf Enter ... weil sonst bei contents wechsel auf guess texfeld erneut mit der alten eingabe geschickt wurde
     }
-    //case _ => println("gui event unimplemented: " + _)
   }
 
   def processInput(input: String) : Unit = {
@@ -164,9 +162,6 @@ class SwingGUI(controller: Controller) extends Frame {
 
   //---------------------------------------------------------------------------------------------------------
 
-
-
-
   // ------------------------------------------------------------------------------------------
 
   var set_guess_panel = new FlowPanel {
@@ -199,12 +194,6 @@ class SwingGUI(controller: Controller) extends Frame {
   }
 
   // ------------------------------------------------------------------------------------------
-
-  ////////////////////////////////////////
-  val warning_next_player = new FlowPanel {
-
-  }
-  ///////////////////////////////////////
 
   //------------------------------------------------------------------------------------------
 
@@ -239,21 +228,6 @@ class SwingGUI(controller: Controller) extends Frame {
 
 
   //------------------------------------------------------------------------------------------
-
-
-  /////////////////////////////////////////
-  val round_over = new FlowPanel {
-
-  }
-  /////////////////////////////////////////
-
-
-  /////////////////////////////////////////
-  val game_over = new FlowPanel {
-
-  }
-  ////////////////////////////////////////
-
 
   // ------------------------------------------------------------------------------------------
 
