@@ -138,15 +138,15 @@ class SwingGUI(controller: Controller) extends Frame {
         background = Color.YELLOW
         name = "yellow"
       }
-      contents+=button_red
-      contents+=button_green
-      contents+=button_blue
-      contents+=button_yellow
       contents+=label
       contents+=trump_label
       contents+=trump
       contents+=hand_label
       contents+=hand
+      contents+=button_red
+      contents+=button_green
+      contents+=button_blue
+      contents+=button_yellow
     }
     listenTo(wish_trump_panel.button_green)
     listenTo(wish_trump_panel.button_red)
