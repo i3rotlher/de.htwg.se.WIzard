@@ -1,13 +1,5 @@
 package de.htwg.se.wizard.model
 
-import java.awt.Image
-import java.io.File
-import java.nio.file.Path
-
-import javax.imageio.ImageIO
-
-import scala.swing.Image
-
 abstract case class Card(num: Int, colour: String) {
   def get_String: String
   override def toString:String = get_String

@@ -1,4 +1,5 @@
 package de.htwg.se.wizard.model
+
 import de.htwg.se.wizard.aview.TUI
 import de.htwg.se.wizard.control._
 import org.scalatest.matchers.should.Matchers._
@@ -18,9 +19,9 @@ class TUITest extends AnyWordSpec {
       tui.state.isInstanceOf[get_Amount] shouldBe true
     }
     "return -1 on failure when checking the amount input" in {
-      tui.check_Amount("7") shouldBe(-1)
+      tui.check_Amount("7") shouldBe (-1)
     }
-    "return the value if it's valid on check amount" in{
+    "return the value if it's valid on check amount" in {
       tui.check_Amount("4") shouldBe 4
     }
     "be able to Create a player when given a name" in {
@@ -87,11 +88,54 @@ class TUITest extends AnyWordSpec {
 
     }
     "should invoke diffrent matches for each diffrent state it can be" in {
-      for (state <- List(new get_Amount, new player_create, new set_Wizard_trump,
-        new next_guess, new next_player_card, new game_over)) {
+      for (state <- List(new name_ok,
+        new set_Wizard_trump,
+        new game_started,
+        new get_Amount,
+        new player_create,
+        new round_started,
+        new start_round,
+        new Wizard_trump,
+        new next_guess,
+        new next_player_card,
+        new round_over,
+        new card_not_playable,
+        new guesses_set,
+        new mini_over,
+        new game_over)) {
         tui.state = state
         tui.processInput("bla")
       }
+    }
+
+    "should invoke different matches for each different state it can be" in {
+      import scala.swing.event.Event
+      class not_a_real_state extends Event
+
+      for (state <- List(new name_ok,
+        new set_Wizard_trump,
+        new game_started,
+        new get_Amount,
+        new player_create,
+        new round_started,
+        new start_round,
+        new Wizard_trump,
+        new next_guess,
+        new next_player_card,
+        new round_over,
+        new card_not_playable,
+        new guesses_set,
+        new mini_over,
+        new game_over,
+        new not_a_real_state)) {
+        controller.publish(state)
+      }
+    }
+
+
+    "should print the wizard trump massage and start round massage" in {
+      tui.wizard_trump()
+      tui.start_round()
     }
   }
 }

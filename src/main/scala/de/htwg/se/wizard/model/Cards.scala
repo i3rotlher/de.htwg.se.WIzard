@@ -1,9 +1,5 @@
 package de.htwg.se.wizard.model
 
-import java.nio.file.Path
-
-import scala.reflect.io.File
-
 case object Cards extends Calc with Random {
 
     val all_cards: Array[Card] = Array(

@@ -11,6 +11,7 @@ class Controller(var game: Gamestate) extends Publisher{
   def set_trump_card(): Gamestate = {
     game = game.set_Trump_card(game.players, game.round_number)
     if (game.trump_Card.num == 14) {
+      game = game.copy(active_Player_idx = (active_player_idx()-1+player_amount())%player_amount())
       publish(new Wizard_trump)
       publish(new set_Wizard_trump)
       return game

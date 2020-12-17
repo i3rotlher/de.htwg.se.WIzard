@@ -1,4 +1,6 @@
 package de.htwg.se.wizard.aview.gui
+import java.awt.Color
+
 import de.htwg.se.wizard.control._
 import de.htwg.se.wizard.model.Card
 import javax.swing.ImageIcon
@@ -10,7 +12,7 @@ import scala.util.{Failure, Success, Try}
 class SwingGUI(controller: Controller) extends Frame {
 
   listenTo(controller)
-
+  centerOnScreen()
   override def closeOperation(): Unit = {
     System.exit(-1)
   }
@@ -45,9 +47,10 @@ class SwingGUI(controller: Controller) extends Frame {
       state = event
     case ButtonClicked(b) => println(b.name);processInput(b.name)
       //Zähler einbauen -> doppelte ausführung vermeiden
-    case EditDone(s) => if (s.text != "Enter your name here ..." && s.text != "Enter your guess here ...") {
+    case EditDone(s) => if (s.text != "Enter your name here ..." && s.text != "Enter your guess here ..." && s.text != "Enter your cardnumber here ...") {
       println(s.text)
       processInput(s.text)
+      s.text = "Enter your name here ..." // zurücksetzten auf Enter ... weil sonst bei contents wechsel auf guess texfeld erneut mit der alten eingabe geschickt wurde
     }
     //case _ => println("gui event unimplemented: " + _)
   }
@@ -92,43 +95,110 @@ class SwingGUI(controller: Controller) extends Frame {
     controller.publish(new get_Amount)
   }
 
+  // ---------------------------------------------------------------------------------------------------------
 
-  def wizard_trump(): Unit = {
-    val player = controller.get_player((controller.active_player_idx()-1+controller.player_amount())%controller.player_amount())
-    println("Your cards: " + player.showHand())
-    val hand = controller.game.players(controller.active_player_idx()).hand
-
-    for (card <- hand) {
-      val card_label = new Label {
-        icon = new ImageIcon(get_card_face_path(card))
-      }
-//      wish_trump.player_hand_panel.contents+=card_label
+  var wish_trump_panel = new FlowPanel {
+    val button_red = new Button("Red") {
+      background = Color.RED
+      name = "red"
     }
-//    wish_trump.label.text = "A wizard has been drawn as the trump card!\n" + player.name + " which color do you want to be trump?"
-//    contents = wish_trump
+    val button_green = new Button("Green") {
+      background = Color.GREEN
+      name = "green"
+    }
+    val button_blue = new Button("Blue"){
+      background = Color.BLUE
+      name = "blue"
+    }
+    val button_yellow = new Button("Yellow"){
+      background = Color.YELLOW
+      name = "yellow"
+    }
   }
 
+  def wizard_trump(): Unit = {
+
+    wish_trump_panel = new FlowPanel {
+      val label = new Label("A wizard has been drawn as trump! " + controller.get_player(controller.active_player_idx()).name + " which color do you want to be trump?")
+      val trump_label = new Label("Trump card:")
+      var trump = Card_panel(controller.game.trump_Card)
+      val hand_label = new Label("Your cards:")
+      var hand = new Hand_panel(controller.game.players(controller.active_player_idx()).hand)
+      val button_red = new Button("Red") {
+        background = Color.RED
+        name = "red"
+      }
+      val button_green = new Button("Green") {
+        background = Color.GREEN
+        name = "green"
+      }
+      val button_blue = new Button("Blue"){
+        background = Color.BLUE
+        name = "blue"
+      }
+      val button_yellow = new Button("Yellow"){
+        background = Color.YELLOW
+        name = "yellow"
+      }
+      contents+=button_red
+      contents+=button_green
+      contents+=button_blue
+      contents+=button_yellow
+      contents+=label
+      contents+=trump_label
+      contents+=trump
+      contents+=hand_label
+      contents+=hand
+    }
+    listenTo(wish_trump_panel.button_green)
+    listenTo(wish_trump_panel.button_red)
+    listenTo(wish_trump_panel.button_blue)
+    listenTo(wish_trump_panel.button_yellow)
+
+    contents = new BorderPanel {
+      add(wish_trump_panel, BorderPanel.Position.Center)
+      add(new Table_panel(controller.game), BorderPanel.Position.East)
+    }
+
+  }
+
+  //---------------------------------------------------------------------------------------------------------
+
+
+
+
+  // ------------------------------------------------------------------------------------------
+
+  var set_guess_panel = new FlowPanel {
+    var text_field = new TextField("Enter your guess here ...", 14)
+    contents+=text_field
+  }
 
   def guess(): Unit = {
 
-    val set_guess_panel = new FlowPanel {
-      val label = new Label()
-      val trump = Card_panel(controller.game.trump_Card)
-      trump.label.text = "Trump card:"
-      val hand = new Hand_panel(controller.game.players(controller.active_player_idx()).hand)
+    set_guess_panel = new FlowPanel {
+      val label = new Label(controller.get_player(controller.active_player_idx()).name + " how many tricks are you going to make?")
+      val trump_label = new Label("Trump card:")
+      var trump = Card_panel(controller.game.trump_Card)
+      val hand_label = new Label("Your cards:")
+      var hand = new Hand_panel(controller.game.players(controller.active_player_idx()).hand)
       var text_field = new TextField("Enter your guess here ...", 14)
+
+      contents+=label
+      contents+=trump_label
       contents+=trump
+      contents+=hand_label
       contents+=hand
       contents+=text_field
     }
-
     listenTo(set_guess_panel.text_field)
-
-    val active_player = controller.get_player(controller.active_player_idx())
-    set_guess_panel.label.text = active_player.name + " how many tricks are you going to make?"
-
-    contents=set_guess_panel
+    contents = new BorderPanel {
+      add(set_guess_panel, BorderPanel.Position.Center)
+      add(new Table_panel(controller.game), BorderPanel.Position.East)
+    }
   }
+
+  // ------------------------------------------------------------------------------------------
 
   ////////////////////////////////////////
   val warning_next_player = new FlowPanel {
@@ -136,14 +206,47 @@ class SwingGUI(controller: Controller) extends Frame {
   }
   ///////////////////////////////////////
 
-  //main Panel + Status leiste
-  val playing_panel = new FlowPanel {
+  //------------------------------------------------------------------------------------------
 
+  var playing_panel = new FlowPanel {
+    var text_field = new TextField("Enter your cardnumber here ...", 14)
+    contents+=text_field
   }
 
+  def play_card(): Unit = {
+
+    playing_panel = new FlowPanel {
+      val label = new Label(controller.get_player(controller.active_player_idx()).name + " which card to you want to play?")
+      val trump_label = new Label("Trump card:")
+      var trump = Card_panel(controller.game.trump_Card)
+      val hand_label = new Label("Your cards:")
+      var hand = new Hand_panel(controller.game.players(controller.active_player_idx()).hand)
+      var text_field = new TextField("Enter your cardnumber here ...", 14)
+
+      contents+=label
+      contents+=trump_label
+      contents+=trump
+      contents+=hand_label
+      contents+=hand
+      contents+=text_field
+    }
+    listenTo(playing_panel.text_field)
+    contents = new BorderPanel {
+      add(playing_panel, BorderPanel.Position.Center)
+      add(new Table_panel(controller.game), BorderPanel.Position.East)
+    }
+  }
+
+
+  //------------------------------------------------------------------------------------------
+
+
+  /////////////////////////////////////////
   val round_over = new FlowPanel {
 
   }
+  /////////////////////////////////////////
+
 
   /////////////////////////////////////////
   val game_over = new FlowPanel {
@@ -154,19 +257,19 @@ class SwingGUI(controller: Controller) extends Frame {
 
   // ------------------------------------------------------------------------------------------
 
-  val set_name_panel = new FlowPanel {
-    val label = new Label("Player " + "X" + " whats your Name ?")
-    contents += label
-    val text_field = new TextField("Enter your name here ...", 14)
-    val undo_previous = new Button("\u2190") {
-      name = "r"
-    }
-    val redo_change = new Button("\u2192") {
-      name = "y"
-    }
-    contents += undo_previous
-    contents += text_field
-    contents += redo_change
+    val set_name_panel = new FlowPanel {
+      val label = new Label("Player " + "X" + " whats your Name ?")
+      contents += label
+      val text_field = new TextField("Enter your name here ...", 14)
+      val undo_previous = new Button("\u2190") {
+        name = "r"
+      }
+      val redo_change = new Button("\u2192") {
+        name = "y"
+      }
+      contents += undo_previous
+      contents += text_field
+      contents += redo_change
   }
 
   listenTo(set_name_panel.undo_previous)
@@ -175,8 +278,6 @@ class SwingGUI(controller: Controller) extends Frame {
 
   def set_name(activeplayer_idx: Int): Unit = {
     set_name_panel.label.text ="Player " + activeplayer_idx + " whats your Name ?"
-    set_name_panel.text_field.text = "Enter your name here ..."
-
     contents=set_name_panel
   }
 
@@ -231,13 +332,6 @@ class SwingGUI(controller: Controller) extends Frame {
           true
         }
     }
-  }
-
-  def play_card(): Unit = {
-    val active_player = controller.get_player(controller.active_player_idx())
-    println("Trump card: " + controller.game.trump_Card)
-    println(active_player.name + " which card do you want to play ?")
-    println("Your cards: " + active_player.showHand()+"\n\n\n\n\n")
   }
 
   def get_card(input: String): Unit = {

@@ -73,10 +73,10 @@ class ControllerTest extends AnyWordSpec {
         controller1.game.round_number shouldBe 0
       }
       "after set_guess has been called" in {
-        val controller2 = new Controller(controller.game)
-        controller2.start_round(0)
-        controller2.set_guess(2)
-        controller2.game.game_table(0).guessed_tricks(0) shouldBe(2)
+        val controller2_1 = new Controller(controller.game)
+        controller2_1.start_round(0)
+        controller2_1.set_guess(2)
+        controller2_1.game.game_table(0).guessed_tricks(0) shouldBe(2)
       }
       "after set_guess has been called by the last player" in {
         val controller2 = new Controller(controller.game)

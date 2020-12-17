@@ -15,10 +15,13 @@ class Table_panel(gamestate: Gamestate) extends BoxPanel(Orientation.Vertical) {
     names(x) = player.name
   }
 
-  var rounds: Array[Array[Any]] = Array.fill(60/gamestate.players.size,gamestate.players.size){"   "}
-  for ((round, x) <- game_table.zipWithIndex) {
-    for (y <- gamestate.players.indices) {
-       rounds(x)(y) = round.results(y)+ "  | " + round.guessed_tricks(y)
+  var rounds: Array[Array[Any]] = Array.fill(60/gamestate.players.size,gamestate.players.size){"        |  "}
+
+  if (game_table.size -1 > 0) {
+    for ((round, x) <- game_table.zipWithIndex) {
+      for (y <- gamestate.players.indices) {
+        rounds(x)(y) = "  " + round.results(y) + "   | " + round.guessed_tricks(y)
+      }
     }
   }
   val table: Table = new Table(rounds ,names.toSeq) {
