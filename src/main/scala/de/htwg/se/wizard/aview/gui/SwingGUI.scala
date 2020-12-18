@@ -277,17 +277,17 @@ class SwingGUI(controller: Controller) extends Frame {
   }
 
   def start_round() : Unit = {
-    println("- - - - - Round " + (controller.game.round_number+1) + " started - - - - -")
-    println("Generating hands . . .")
-    println("Generating trumpcard . . .\n\n\n")
+//    println("- - - - - Round " + (controller.game.round_number+1) + " started - - - - -")
+//    println("Generating hands . . .")
+//    println("Generating trumpcard . . .\n\n\n")
   }
 
   def check_trump_wish(input: String): Boolean = {
-    if(!List("red","green","blue","yellow").contains(input)) {
-      println("You may only choose one of these colors red,blue,yellow,green")
-      return false
-    }
-    controller.wish_trump(input)
+//    if(!List("red","green","blue","yellow").contains(input)) {
+//      println("You may only choose one of these colors red,blue,yellow,green")
+//      return false
+//    }
+//    controller.wish_trump(input)
     true
   }
 
