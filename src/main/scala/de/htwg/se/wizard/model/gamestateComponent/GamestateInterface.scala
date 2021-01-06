@@ -1,5 +1,6 @@
 package de.htwg.se.wizard.model.gamestateComponent
 import de.htwg.se.wizard.model.cardsComponent.Card
+import de.htwg.se.wizard.model.gamestateComponent.GamestateBaseImpl.{Gamestate, PlayerStrategy}
 import de.htwg.se.wizard.model.playerComponent.Player
 
 trait GamestateInterface extends PlayerStrategy {

@@ -1,5 +1,5 @@
 package de.htwg.se.wizard.model
-import de.htwg.se.wizard.model.roundComponent.Round
+import de.htwg.se.wizard.model.roundComponent.RoundBaseImpl.Round
 import org.scalatest.matchers.should.Matchers._
 import org.scalatest.wordspec.AnyWordSpec
 

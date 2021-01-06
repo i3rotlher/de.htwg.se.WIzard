@@ -1,6 +1,6 @@
 package de.htwg.se.wizard.aview.gui
 
-import de.htwg.se.wizard.model.gamestateComponent.Gamestate
+import de.htwg.se.wizard.model.gamestateComponent.GamestateBaseImpl.Gamestate
 
 import scala.swing._
 

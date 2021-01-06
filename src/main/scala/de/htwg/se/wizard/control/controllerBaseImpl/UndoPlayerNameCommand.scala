@@ -1,4 +1,4 @@
-package de.htwg.se.wizard.control.controllerComponent
+package de.htwg.se.wizard.control.controllerBaseImpl
 
 import de.htwg.se.wizard.model.playerComponent.Player
 import de.htwg.se.wizard.util.Command

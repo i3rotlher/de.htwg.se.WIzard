@@ -1,8 +1,9 @@
-package de.htwg.se.wizard.model.gamestateComponent
+package de.htwg.se.wizard.model.gamestateComponent.GamestateBaseImpl
 
-import de.htwg.se.wizard.model.playerComponent.Player
 import de.htwg.se.wizard.model.cardsComponent.{Card, Card_with_value, Cards}
-import de.htwg.se.wizard.model.roundComponent.Round
+import de.htwg.se.wizard.model.gamestateComponent.GamestateInterface
+import de.htwg.se.wizard.model.playerComponent.Player
+import de.htwg.se.wizard.model.roundComponent.RoundBaseImpl.Round
 
 
 case class Gamestate(players: List[Player] = List(), game_table: List[Round] = List(), round_number: Int = 0,

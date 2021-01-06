@@ -1,8 +1,8 @@
-package de.htwg.se.wizard.control.controllerComponent
+package de.htwg.se.wizard.control
 
 import de.htwg.se.wizard.model.cardsComponent.Card
+import de.htwg.se.wizard.model.gamestateComponent.GamestateBaseImpl.Gamestate
 import de.htwg.se.wizard.model.playerComponent.Player
-import de.htwg.se.wizard.model.gamestateComponent.Gamestate
 import de.htwg.se.wizard.util.UndoManager
 
 import scala.swing.Publisher

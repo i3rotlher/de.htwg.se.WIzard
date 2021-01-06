@@ -1,4 +1,6 @@
-package de.htwg.se.wizard.model.roundComponent
+package de.htwg.se.wizard.model.roundComponent.RoundBaseImpl
+
+import de.htwg.se.wizard.model.roundComponent.RoundInterface
 
 case class Round(guessed_tricks: List[Int], results: List[Int] = List.empty) extends RoundInterface {
 

@@ -1,4 +1,4 @@
-package de.htwg.se.wizard.control.controllerComponent
+package de.htwg.se.wizard.control.controllerBaseImpl
 
 import scala.swing.event.Event
 
