@@ -1,11 +1,9 @@
 package de.htwg.se.wizard.model
 
 import de.htwg.se.wizard.aview.TUI
-import de.htwg.se.wizard.control._
-import de.htwg.se.wizard.control.controller.controllerBaseImpl.game_over
-import de.htwg.se.wizard.control.controller.game_over
 import de.htwg.se.wizard.control.controllerBaseImpl.{Controller, Wizard_trump, card_not_playable, game_over, game_started, get_Amount, guesses_set, mini_over, name_ok, next_guess, next_player_card, player_create, round_over, round_started, set_Wizard_trump, start_round}
 import de.htwg.se.wizard.model.gamestateComponent.GamestateBaseImpl.Gamestate
+import de.htwg.se.wizard.model.gamestateComponent.GamestateInterface
 import org.scalatest.matchers.should.Matchers._
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -30,18 +28,18 @@ class TUITest extends AnyWordSpec {
     }
     "be able to Create a player when given a name" in {
       tui.create_player("Karl")
-      controller.game.players(0).name shouldBe "Karl"
+      controller.game.getPlayers(0).getName shouldBe "Karl"
     }
     "be able to reset the ceated players name" in {
       tui.create_player("Karl")
       tui.create_player("r")
-      controller.game.players(1).name shouldBe "unknown"
+      controller.game.getPlayers(1).getName shouldBe "unknown"
     }
     "be able to redo a players name" in {
       tui.create_player("Karl")
       tui.create_player("r")
       tui.create_player("y")
-      controller.game.players(0).name shouldBe "Karl"
+      controller.game.getPlayers(0).getName shouldBe "Karl"
     }
     "return false if a wrong color has been inputed" in {
       tui.check_trump_wish("pink") shouldBe false
@@ -60,7 +58,7 @@ class TUITest extends AnyWordSpec {
     }
     "set the guess if the input was correct" in {
 
-      var game = Gamestate().set_player_amount(3)
+      var game: GamestateInterface = Gamestate().set_player_amount(3)
       game = game.create_player("Max")
       game = game.create_player("Niclas")
       game = game.create_player("Prof")
@@ -69,26 +67,26 @@ class TUITest extends AnyWordSpec {
       tui.get_guess("1") shouldBe true
     }
     "be able toselect a card the player wants to play" in {
-      var game = Gamestate().set_player_amount(3)
+      var game: GamestateInterface = Gamestate().set_player_amount(3)
       game = game.create_player("Max")
       game = game.create_player("Niclas")
       game = game.create_player("Prof")
       controller.game = game
       controller.start_round(1)
-      val old_card = controller.game.players(controller.active_player_idx()).hand(0)
+      val old_card = controller.game.getPlayers(controller.active_player_idx()).getHand(0)
       tui.get_card("1")
-      controller.game.players(controller.active_player_idx()).hand.contains(old_card) shouldBe false
+      controller.game.getPlayers(controller.active_player_idx()).getHand.contains(old_card) shouldBe false
     }
     "should not invoke play_card if the input for the card selection was incorrect" in {
-      var game = Gamestate().set_player_amount(3)
+      var game: GamestateInterface = Gamestate().set_player_amount(3)
       game = game.create_player("Max")
       game = game.create_player("Niclas")
       game = game.create_player("Prof")
       controller.game = game
       controller.start_round(1)
-      val old_cards = controller.game.players(controller.active_player_idx()).hand
+      val old_cards = controller.game.getPlayers(controller.active_player_idx()).getHand
       tui.get_card("-a")
-      controller.game.players(controller.active_player_idx()).hand shouldBe old_cards
+      controller.game.getPlayers(controller.active_player_idx()).getHand shouldBe old_cards
 
     }
     "should invoke diffrent matches for each diffrent state it can be" in {

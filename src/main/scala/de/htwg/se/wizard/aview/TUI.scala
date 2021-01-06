@@ -6,7 +6,7 @@ import scala.swing.Reactor
 import scala.swing.event.Event
 import scala.util.{Failure, Success, Try}
 
-class TUI(controller: Controller) extends Reactor {
+class TUI(controller: ControllerInteface) extends Reactor {
 
   listenTo(controller)
   var state: Event = new game_started
@@ -30,12 +30,12 @@ class TUI(controller: Controller) extends Reactor {
       case event: card_not_playable =>
         println("This card is not playable right now!\n Choose a different number!"); event
       case event: mini_over =>
-        println("Trick won by " + controller.get_mini_winner().name + "!"); event
+        println("Trick won by " + controller.get_mini_winner().getName + "!"); event
       case event: round_over =>
-        println(controller.game.game_table); event
+        println(controller.getGamestate().getGame_table); event
       case event: game_over =>
         println("Game Over!")
-        println(controller.game.calc_total())
+        println(controller.getGamestate().calc_total())
         state = event
       case _ => println("tui event unimplemented!")
   }
@@ -75,7 +75,7 @@ class TUI(controller: Controller) extends Reactor {
   }
 
   def start_round() : Unit = {
-    println("- - - - - Round " + (controller.game.round_number+1) + " started - - - - -")
+    println("- - - - - Round " + (controller.getGamestate().getRound_number+1) + " started - - - - -")
     println("Generating hands . . .")
     println("Generating trumpcard . . .\n\n\n")
   }
@@ -83,7 +83,7 @@ class TUI(controller: Controller) extends Reactor {
   def wizard_trump(): Unit = {
     println("A wizard has been drawn as the trump card!")
     val player = controller.get_player((controller.active_player_idx()-1+controller.player_amount())%controller.player_amount())
-    println(player.name + " which color do you want to be trump? [red,blue,yellow,green]")
+    println(player.getName + " which color do you want to be trump? [red,blue,yellow,green]")
     println("Your cards: " + player.showHand())
   }
 
@@ -98,8 +98,8 @@ class TUI(controller: Controller) extends Reactor {
 
   def guess(): Unit = {
     val active_player = controller.get_player(controller.active_player_idx())
-    println("Trump card: " + controller.game.trump_Card)
-    println(active_player.name + " how many tricks are you going to make?")
+    println("Trump card: " + controller.getGamestate().getTrump_card)
+    println(active_player.getName + " how many tricks are you going to make?")
     println(active_player.showHand()+"\n\n\n\n\n")
   }
 
@@ -122,21 +122,21 @@ class TUI(controller: Controller) extends Reactor {
 
   def play_card(): Unit = {
     val active_player = controller.get_player(controller.active_player_idx())
-    println("Trump card: " + controller.game.trump_Card)
-    println(active_player.name + " which card do you want to play ?")
+    println("Trump card: " + controller.getGamestate().getTrump_card)
+    println(active_player.getName + " which card do you want to play ?")
     println("Your cards: " + active_player.showHand()+"\n\n\n\n\n")
   }
 
   def get_card(input: String): Unit = {
     val active_player = controller.get_player(controller.active_player_idx())
     var list = List[String]()
-    for (x <- 1 to active_player.hand.size) {
+    for (x <- 1 to active_player.getHand.size) {
       list = list :+ x.toString
     }
     if (!list.contains(input)) {
       println("Insert a valid card number!")
     } else {
-      controller.play_card(active_player.hand(input.toInt-1))
+      controller.play_card(active_player.getHand(input.toInt-1))
     }
   }
 }

@@ -2,14 +2,14 @@ package de.htwg.se.wizard.aview.gui
 import java.awt.Color
 
 import de.htwg.se.wizard.control._
-import de.htwg.se.wizard.control.controllerBaseImpl.{Controller, Wizard_trump, card_not_playable, game_over, game_started, get_Amount, mini_over, next_guess, next_player_card, player_create, round_over, set_Wizard_trump, start_round}
+import de.htwg.se.wizard.control.controllerBaseImpl.{Wizard_trump, card_not_playable, game_over, game_started, get_Amount, mini_over, next_guess, next_player_card, player_create, round_over, set_Wizard_trump, start_round}
 import de.htwg.se.wizard.model.cardsComponent.Card
 
 import scala.swing._
 import scala.swing.event._
 import scala.util.{Failure, Success, Try}
 
-class SwingGUI(controller: Controller) extends Frame {
+class SwingGUI(controller: ControllerInteface) extends Frame {
 
   listenTo(controller)
   centerOnScreen()
@@ -38,12 +38,12 @@ class SwingGUI(controller: Controller) extends Frame {
     case event: card_not_playable =>
       println("This card is not playable right now!\n Choose a different number!"); event
     case event: mini_over =>
-      println("Trick won by " + controller.get_mini_winner().name + "!"); event
+      println("Trick won by " + controller.get_mini_winner().getName + "!"); event
     case event: round_over =>
-      println(controller.game.game_table); event
+      println(controller.getGamestate().getGame_table); event
     case event: game_over =>
       println("Game Over!")
-      println(controller.game.calc_total())
+      println(controller.getGamestate().calc_total())
       state = event
     case ButtonClicked(b) => println(b.name);processInput(b.name)
       //Zähler einbauen -> doppelte ausführung vermeiden
@@ -118,11 +118,12 @@ class SwingGUI(controller: Controller) extends Frame {
   def wizard_trump(): Unit = {
 
     wish_trump_panel = new FlowPanel {
-      val label = new Label("A wizard has been drawn as trump! " + controller.get_player(controller.active_player_idx()).name + " which color do you want to be trump?")
+      val label = new Label("A wizard has been drawn as trump! " + controller.get_player(controller.active_player_idx()).getName + " which color do you want to be trump?")
       val trump_label = new Label("Trump card:")
-      var trump = Card_panel(controller.game.trump_Card)
+      var trump = Card_panel(controller.getGamestate().getTrump_card)
       val hand_label = new Label("Your cards:")
-      var hand = new Hand_panel(controller.game.players(controller.active_player_idx()).hand)
+      var hand = new Hand_panel(controller.getGamestate().getPlayers(controller.active_player_idx()).getHand)
+
       val button_red = new Button("Red") {
         background = Color.RED
         name = "red"
@@ -139,6 +140,7 @@ class SwingGUI(controller: Controller) extends Frame {
         background = Color.YELLOW
         name = "yellow"
       }
+
       contents+=label
       contents+=trump_label
       contents+=trump
@@ -149,6 +151,7 @@ class SwingGUI(controller: Controller) extends Frame {
       contents+=button_blue
       contents+=button_yellow
     }
+
     listenTo(wish_trump_panel.button_green)
     listenTo(wish_trump_panel.button_red)
     listenTo(wish_trump_panel.button_blue)
@@ -156,7 +159,7 @@ class SwingGUI(controller: Controller) extends Frame {
 
     contents = new BorderPanel {
       add(wish_trump_panel, BorderPanel.Position.Center)
-      add(new Table_panel(controller.game), BorderPanel.Position.East)
+      add(new Table_panel(controller.getGamestate()), BorderPanel.Position.East)
     }
 
   }
@@ -173,11 +176,11 @@ class SwingGUI(controller: Controller) extends Frame {
   def guess(): Unit = {
 
     set_guess_panel = new FlowPanel {
-      val label = new Label(controller.get_player(controller.active_player_idx()).name + " how many tricks are you going to make?")
+      val label = new Label(controller.get_player(controller.active_player_idx()).getName + " how many tricks are you going to make?")
       val trump_label = new Label("Trump card:")
-      var trump = Card_panel(controller.game.trump_Card)
+      var trump = Card_panel(controller.getGamestate().getTrump_card)
       val hand_label = new Label("Your cards:")
-      var hand = new Hand_panel(controller.game.players(controller.active_player_idx()).hand)
+      var hand = new Hand_panel(controller.getGamestate().getPlayers(controller.active_player_idx()).getHand)
       var text_field = new TextField("Enter your guess here ...", 14)
 
       contents+=label
@@ -190,7 +193,7 @@ class SwingGUI(controller: Controller) extends Frame {
     listenTo(set_guess_panel.text_field)
     contents = new BorderPanel {
       add(set_guess_panel, BorderPanel.Position.Center)
-      add(new Table_panel(controller.game), BorderPanel.Position.East)
+      add(new Table_panel(controller.getGamestate()), BorderPanel.Position.East)
     }
   }
 
@@ -206,11 +209,11 @@ class SwingGUI(controller: Controller) extends Frame {
   def play_card(): Unit = {
 
     playing_panel = new FlowPanel {
-      val label = new Label(controller.get_player(controller.active_player_idx()).name + " which card to you want to play?")
+      val label = new Label(controller.get_player(controller.active_player_idx()).getName + " which card to you want to play?")
       val trump_label = new Label("Trump card:")
-      var trump = Card_panel(controller.game.trump_Card)
+      var trump = Card_panel(controller.getGamestate().getTrump_card)
       val hand_label = new Label("Your cards:")
-      var hand = new Hand_panel(controller.game.players(controller.active_player_idx()).hand)
+      var hand = new Hand_panel(controller.getGamestate().getPlayers(controller.active_player_idx()).getHand)
       var text_field = new TextField("Enter your cardnumber here ...", 14)
 
       contents+=label
@@ -223,7 +226,7 @@ class SwingGUI(controller: Controller) extends Frame {
     listenTo(playing_panel.text_field)
     contents = new BorderPanel {
       add(playing_panel, BorderPanel.Position.Center)
-      add(new Table_panel(controller.game), BorderPanel.Position.East)
+      add(new Table_panel(controller.getGamestate()), BorderPanel.Position.East)
     }
   }
 
@@ -312,13 +315,13 @@ class SwingGUI(controller: Controller) extends Frame {
   def get_card(input: String): Unit = {
     val active_player = controller.get_player(controller.active_player_idx())
     var list = List[String]()
-    for (x <- 1 to active_player.hand.size) {
+    for (x <- 1 to active_player.getHand.size) {
       list = list :+ x.toString
     }
     if (!list.contains(input)) {
       println("Insert a valid card number!")
     } else {
-      controller.play_card(active_player.hand(input.toInt-1))
+      controller.play_card(active_player.getHand(input.toInt-1))
     }
   }
 

@@ -1,8 +1,6 @@
-package de.htwg.se.wizard.model.roundComponent.RoundBaseImpl
+package de.htwg.se.wizard.model.gamestateComponent.GamestateBaseImpl
 
-import de.htwg.se.wizard.model.roundComponent.RoundInterface
-
-case class Round(guessed_tricks: List[Int], results: List[Int] = List.empty) extends RoundInterface {
+case class Round(guessed_tricks: List[Int], results: List[Int] = List.empty) {
 
   def madeTricks(list: Iterable[Int]): Round = {
     var x = List[Int]()
