@@ -1,4 +1,4 @@
-package de.htwg.se.wizard.model
+package de.htwg.se.wizard.model.cardsComponent
 
 abstract case class Card(num: Int, colour: String) {
   def get_String: String

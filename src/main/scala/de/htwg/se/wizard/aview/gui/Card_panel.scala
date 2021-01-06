@@ -1,7 +1,8 @@
 package de.htwg.se.wizard.aview.gui
 
-import de.htwg.se.wizard.model.Card
+import de.htwg.se.wizard.model.cardsComponent.Card
 import javax.swing.ImageIcon
+
 import scala.swing.Label
 
 case class Card_panel(card: Card) extends Label {

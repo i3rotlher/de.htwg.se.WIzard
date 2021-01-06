@@ -1,4 +1,5 @@
-package de.htwg.se.wizard.control
+package de.htwg.se.wizard.control.controllerComponent
+
 import scala.swing.event.Event
 
 class name_ok extends Event

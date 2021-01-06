@@ -1,6 +1,11 @@
 package de.htwg.se.wizard.model
 
 import de.htwg.se.wizard.control._
+import de.htwg.se.wizard.control.controllerComponent.Controller
+import de.htwg.se.wizard.model.cardsComponent.{Card, Card_with_value}
+import de.htwg.se.wizard.model.gamestateComponent.Gamestate
+import de.htwg.se.wizard.model.playerComponent.Player
+import de.htwg.se.wizard.model.roundComponent.Round
 import org.scalatest.matchers.should.Matchers._
 import org.scalatest.wordspec.AnyWordSpec
 

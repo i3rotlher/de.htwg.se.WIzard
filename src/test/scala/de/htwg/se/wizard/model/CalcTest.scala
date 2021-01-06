@@ -1,5 +1,6 @@
 package de.htwg.se.wizard.model
 
+import de.htwg.se.wizard.model.cardsComponent.Cards
 import org.scalatest.matchers.should.Matchers._
 import org.scalatest.wordspec.AnyWordSpec
 

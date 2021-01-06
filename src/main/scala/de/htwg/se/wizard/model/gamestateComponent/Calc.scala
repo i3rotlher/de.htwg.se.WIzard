@@ -1,4 +1,6 @@
-package de.htwg.se.wizard.model
+package de.htwg.se.wizard.model.gamestateComponent
+
+import de.htwg.se.wizard.model.cardsComponent.Card
 
 trait Calc {
 
@@ -22,7 +24,7 @@ trait Calc {
     if (winning_Card.num == 14) {
       return winner
     }
-    var counter:Int = 0
+    var counter: Int = 0
     for (comp_Card <- playedCards.tail) {
       counter += 1
       if (comp_Card.num == 14) {
@@ -32,7 +34,7 @@ trait Calc {
           winner = counter
           winning_Card = comp_Card
         }
-      } else if (comp_Card.colour == trumpColour){
+      } else if (comp_Card.colour == trumpColour) {
         winner = counter
         winning_Card = comp_Card
       }

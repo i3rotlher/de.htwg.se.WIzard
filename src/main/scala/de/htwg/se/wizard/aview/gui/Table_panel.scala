@@ -1,6 +1,7 @@
 package de.htwg.se.wizard.aview.gui
 
-import de.htwg.se.wizard.model.Gamestate
+import de.htwg.se.wizard.model.gamestateComponent.Gamestate
+
 import scala.swing._
 
 //columns are moveable

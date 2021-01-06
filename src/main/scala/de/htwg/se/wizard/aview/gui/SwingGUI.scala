@@ -2,7 +2,8 @@ package de.htwg.se.wizard.aview.gui
 import java.awt.Color
 
 import de.htwg.se.wizard.control._
-import de.htwg.se.wizard.model.Card
+import de.htwg.se.wizard.control.controllerComponent.{Controller, Wizard_trump, card_not_playable, game_over, game_started, get_Amount, mini_over, next_guess, next_player_card, player_create, round_over, set_Wizard_trump, start_round}
+import de.htwg.se.wizard.model.cardsComponent.Card
 
 import scala.swing._
 import scala.swing.event._

@@ -1,5 +1,6 @@
 package de.htwg.se.wizard.aview
 import de.htwg.se.wizard.control._
+import de.htwg.se.wizard.control.controllerComponent.{Controller, Wizard_trump, card_not_playable, game_over, game_started, get_Amount, mini_over, name_ok, next_guess, next_player_card, player_create, round_over, set_Wizard_trump, start_round}
 
 import scala.swing.Reactor
 import scala.swing.event.Event

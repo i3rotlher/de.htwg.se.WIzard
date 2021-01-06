@@ -1,4 +1,6 @@
-package de.htwg.se.wizard.model
+package de.htwg.se.wizard.model.playerComponent
+
+import de.htwg.se.wizard.model.cardsComponent.Card
 
 case class Player (name: String = "unknown", hand: List[Card] = List[Card]()) {
 

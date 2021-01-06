@@ -1,7 +1,9 @@
 package de.htwg.se.wizard.aview.gui
 
 import java.awt.Dimension
-import de.htwg.se.wizard.model.Card
+
+import de.htwg.se.wizard.model.cardsComponent.Card
+
 import scala.swing._
 
 class Hand_panel(handcards: List[Card]) extends BoxPanel(Orientation.Vertical) {

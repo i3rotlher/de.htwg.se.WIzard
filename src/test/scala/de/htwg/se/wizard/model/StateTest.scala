@@ -1,6 +1,7 @@
 package de.htwg.se.wizard.model
 
 import de.htwg.se.wizard.control._
+import de.htwg.se.wizard.control.controllerComponent.{Wizard_trump, card_not_playable, game_over, game_started, get_Amount, guesses_set, mini_over, name_ok, next_guess, next_player_card, player_create, round_over, round_started, set_Wizard_trump, start_round}
 import org.scalatest.matchers.should.Matchers._
 import org.scalatest.wordspec.AnyWordSpec
 

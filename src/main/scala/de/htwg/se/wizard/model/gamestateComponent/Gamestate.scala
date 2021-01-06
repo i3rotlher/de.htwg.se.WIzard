@@ -1,10 +1,14 @@
-package de.htwg.se.wizard.model
+package de.htwg.se.wizard.model.gamestateComponent
+
+import de.htwg.se.wizard.model.playerComponent.Player
+import de.htwg.se.wizard.model.cardsComponent.{Card, Card_with_value, Cards}
+import de.htwg.se.wizard.model.roundComponent.Round
 
 
 case class Gamestate(players: List[Player] = List(), game_table: List[Round] = List(), round_number: Int = 0,
                      active_Player_idx: Int = 0, trump_Card: Card = Cards.all_cards(0), serve_card: Card = Cards.all_cards(0),
                      made_tricks: List[Int] = List(), playedCards: List[Card] = List(), mini_starter_idx: Int = 0,
-                     mini_played_counter: Int = 0) extends PlayerStrategy {
+                     mini_played_counter: Int = 0) extends GamestateInterface with PlayerStrategy {
 
   def round_finished(made: Iterable[Int]): Gamestate = {
     val finished_round = game_table.last.madeTricks(made)
@@ -115,7 +119,7 @@ case class Gamestate(players: List[Player] = List(), game_table: List[Round] = L
 
 }
 
-abstract class PlayerStrategy() {
+trait PlayerStrategy {
   def strategy(amount_of_players: Int): Gamestate
 
   def strategy_3_players(): Gamestate
@@ -125,5 +129,4 @@ abstract class PlayerStrategy() {
   def strategy_5_players(): Gamestate
 
   def strategy_6_players(): Gamestate
-
 }

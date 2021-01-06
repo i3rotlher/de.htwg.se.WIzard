@@ -1,5 +1,7 @@
 package de.htwg.se.wizard.model
 
+import de.htwg.se.wizard.model.cardsComponent.Cards
+import de.htwg.se.wizard.model.playerComponent.Player
 import org.scalatest.matchers.should.Matchers._
 import org.scalatest.wordspec.AnyWordSpec
 

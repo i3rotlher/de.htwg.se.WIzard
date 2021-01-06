@@ -1,10 +1,13 @@
-package de.htwg.se.wizard.control
+package de.htwg.se.wizard.control.controllerComponent
 
-import de.htwg.se.wizard.model.{Card, Cards, Gamestate, Player}
+import de.htwg.se.wizard.control._
+import de.htwg.se.wizard.model.cardsComponent.{Card, Cards}
+import de.htwg.se.wizard.model.gamestateComponent.Gamestate
+import de.htwg.se.wizard.model.playerComponent.Player
 
 import scala.swing.Publisher
 
-class Controller(var game: Gamestate) extends Publisher{
+class Controller(var game: Gamestate) extends ControllerInteface with Publisher {
 
   def player_amount(): Int = game.players.size
 
@@ -106,7 +109,7 @@ class Controller(var game: Gamestate) extends Publisher{
   }
 
   def create_player(player_name: String): Gamestate = {
-    val Undo_Player_Name = new Undo_Player_Name(player_name, this)
+    val Undo_Player_Name = new UndoPlayerNameCommand(player_name, this)
     undoManager.doStep(Undo_Player_Name)
 
     if (game.active_Player_idx == 0) {
@@ -126,6 +129,4 @@ class Controller(var game: Gamestate) extends Publisher{
   def redo_player(): Unit = {
     undoManager.redoStep()
   }
-
-  val undoManager = new UndoManager()
 }

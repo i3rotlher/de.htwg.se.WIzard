@@ -2,7 +2,9 @@ package de.htwg.se.wizard
 import de.htwg.se.wizard.control._
 import de.htwg.se.wizard.aview.TUI
 import de.htwg.se.wizard.aview.gui.SwingGUI
+import de.htwg.se.wizard.control.controllerComponent.{Controller, game_over, game_started}
 import de.htwg.se.wizard.model._
+import de.htwg.se.wizard.model.gamestateComponent.Gamestate
 
 object Wizard {
 
