@@ -1,13 +1,16 @@
 package de.htwg.se.wizard.control.controllerBaseImpl
 
+import com.google.inject.Inject
 import de.htwg.se.wizard.control.ControllerInteface
 import de.htwg.se.wizard.model.cardsComponent.{Card, Cards}
 import de.htwg.se.wizard.model.gamestateComponent.GamestateInterface
-import de.htwg.se.wizard.model.playerComponent.PlayerInterface
+import de.htwg.se.wizard.model.playerComponent.PlayerBaseImpl.Player
 
 import scala.swing.Publisher
 
-class Controller(var game: GamestateInterface) extends ControllerInteface with Publisher {
+case class Controller @Inject() (var game: GamestateInterface) extends ControllerInteface with Publisher {
+
+  def setGamestate(gamestate: GamestateInterface): Unit = game = gamestate
 
   def player_amount(): Int = game.getPlayers.size
 
@@ -23,7 +26,7 @@ class Controller(var game: GamestateInterface) extends ControllerInteface with P
     game
   }
 
-  def generate_hands(round_number: Int, players: List[PlayerInterface]): GamestateInterface = {
+  def generate_hands(round_number: Int, players: List[Player]): GamestateInterface = {
     game = game.generate_Hands(round_number, players)
     game
   }
@@ -75,7 +78,7 @@ class Controller(var game: GamestateInterface) extends ControllerInteface with P
     }
   }
 
-  def card_playable(active_player: PlayerInterface, want_to_play: Card, serve_card: Card): Boolean = {
+  def card_playable(active_player: Player, want_to_play: Card, serve_card: Card): Boolean = {
     Cards.isPlayable(serve_card, want_to_play, active_player.getHand)
   }
 
@@ -85,11 +88,11 @@ class Controller(var game: GamestateInterface) extends ControllerInteface with P
     game
   }
 
-  def get_player(idx: Int) : PlayerInterface = game.getPlayers(idx)
+  def get_player(idx: Int) : Player = game.getPlayers(idx)
 
   def active_player_idx(): Int = game.getActive_player_idx
 
-  def get_mini_winner(): PlayerInterface = game.getPlayers(game.getMini_starter)
+  def get_mini_winner(): Player = game.getPlayers(game.getMini_starter)
 
   def wish_trump(color: String) : GamestateInterface = {
     game = game.wish_trumpcard(color)

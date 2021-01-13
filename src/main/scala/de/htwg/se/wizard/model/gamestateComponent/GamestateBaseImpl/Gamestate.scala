@@ -3,15 +3,14 @@ package de.htwg.se.wizard.model.gamestateComponent.GamestateBaseImpl
 import de.htwg.se.wizard.model.cardsComponent.{Card, Card_with_value, Cards}
 import de.htwg.se.wizard.model.gamestateComponent.GamestateInterface
 import de.htwg.se.wizard.model.playerComponent.PlayerBaseImpl.Player
-import de.htwg.se.wizard.model.playerComponent.PlayerInterface
 import de.htwg.se.wizard.util.PlayerStrategy
 
-case class Gamestate (players: List[PlayerInterface] = List(), game_table: List[Round] = List(), round_number: Int = 0,
+case class Gamestate (players: List[Player] = List(), game_table: List[Round] = List(), round_number: Int = 0,
                       active_Player_idx: Int = 0, trump_Card: Card = Cards.all_cards(0), serve_card: Card = Cards.all_cards(0),
                       made_tricks: List[Int] = List(), playedCards: List[Card] = List(), mini_starter_idx: Int = 0,
                       mini_played_counter: Int = 0) extends GamestateInterface with PlayerStrategy {
 
-  def round_finished(made: Iterable[Int]): GamestateInterface = {
+  def round_finished(made: Iterable[Int]): Gamestate = {
     val finished_round = game_table.last.madeTricks(made)
     val new_game_table = game_table.updated(game_table.size - 1, finished_round)
     copy(game_table = new_game_table, mini_starter_idx = (round_number + 1) % players.size, active_Player_idx = (round_number + 1) % players.size,
@@ -20,27 +19,28 @@ case class Gamestate (players: List[PlayerInterface] = List(), game_table: List[
       }, mini_played_counter = 0)
   }
 
-  def set_guess(guessed_tricks: Int): GamestateInterface = {
+  def set_guess(guessed_tricks: Int): Gamestate = {
     val updated_guesses = game_table.last.guessed_tricks.updated(active_Player_idx, guessed_tricks)
     val updated_game_table = game_table.updated(round_number, Round(updated_guesses))
     copy(game_table = updated_game_table, active_Player_idx = (active_Player_idx + 1) % players.size)
   }
 
-  def create_player(player_name: String): GamestateInterface = {
+  def create_player(player_name: String): Gamestate = {
     copy(players = players.updated(active_Player_idx, Player(player_name)), active_Player_idx = (active_Player_idx + 1) % players.size)
   }
 
-  def end_mini(played_cards_in_played_order: Iterable[Card], trump: Card, first_player_index: Int): GamestateInterface = {
+  def end_mini(played_cards_in_played_order: Iterable[Card], trump: Card, first_player_index: Int): Gamestate = {
     val winner_idx = (Cards.calcWinner(played_cards_in_played_order, trump.colour) + first_player_index) % players.size
     copy(mini_starter_idx = winner_idx, made_tricks = made_tricks.updated(winner_idx, made_tricks(winner_idx) + 1), playedCards = List(), mini_played_counter = mini_played_counter + 1, active_Player_idx = winner_idx)
   }
 
-  def generate_Hands(round_number: Int, players: List[PlayerInterface]): GamestateInterface = {
+  def generate_Hands(round_number: Int, players: List[Player]): Gamestate = {
     var tmpCard_Tuple = (List[Card](), List[Card]())
     var n_playerList = players
     for (i <- players.indices) {
       tmpCard_Tuple = Cards.generateHand(round_number + 1, tmpCard_Tuple._2)
-      n_playerList = n_playerList.updated(i, Player(players(i).getName, tmpCard_Tuple._1))
+      val player = Player(players(i).getName).setHand(tmpCard_Tuple._1)
+      n_playerList = n_playerList.updated(i, player)
     }
     copy(players = n_playerList, active_Player_idx = round_number % players.size, game_table = game_table.appended(Round(List.fill(players.size) {
       0
@@ -57,7 +57,7 @@ case class Gamestate (players: List[PlayerInterface] = List(), game_table: List[
     total.toList
   }
 
-  def set_Trump_card(player: List[PlayerInterface], round_nr: Int): Gamestate = {
+  def set_Trump_card(player: List[Player], round_nr: Int): Gamestate = {
     var usedCards = List[Card]()
     for (i <- player) {
       usedCards = usedCards.appendedAll(i.getHand)
@@ -69,7 +69,7 @@ case class Gamestate (players: List[PlayerInterface] = List(), game_table: List[
     copy(trump_Card = trump)
   }
 
-  def playCard(played_card: Card, active_player: PlayerInterface): Gamestate = {
+  def playCard(played_card: Card, active_player: Player): Gamestate = {
     val updated_player = players(players.indexOf(active_player)).playCard(played_card)
     if (players.indexOf(active_player) == mini_starter_idx || serve_card.num == 0 && played_card.num != 0) {
       copy(players = players.updated(players.indexOf(active_player), updated_player), playedCards = playedCards.appended(played_card), serve_card = played_card, active_Player_idx = (active_Player_idx + 1) % players.size)
@@ -132,7 +132,7 @@ case class Gamestate (players: List[PlayerInterface] = List(), game_table: List[
 
   override def getTrump_card: Card = trump_Card
 
-  override def getPlayers: List[PlayerInterface] = players
+  override def getPlayers: List[Player] = players
 
   override def getGame_table: List[Round] = game_table
 
@@ -140,7 +140,7 @@ case class Gamestate (players: List[PlayerInterface] = List(), game_table: List[
 
   override def getActive_player_idx: Int = active_Player_idx
 
-  override def reset_player(): GamestateInterface= {
+  override def reset_player(): Gamestate = {
     copy(players = players.updated(active_Player_idx-1 ,Player()), active_Player_idx = active_Player_idx-1)
   }
 }

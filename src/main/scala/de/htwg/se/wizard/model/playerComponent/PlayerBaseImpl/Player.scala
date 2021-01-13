@@ -1,10 +1,8 @@
 package de.htwg.se.wizard.model.playerComponent.PlayerBaseImpl
 
-import com.google.inject.Inject
 import de.htwg.se.wizard.model.cardsComponent.Card
-import de.htwg.se.wizard.model.playerComponent.PlayerInterface
 
-case class Player (name: String = "unknown", hand: List[Card] = List[Card]()) extends PlayerInterface {
+case class Player (name: String = "unknown", hand: List[Card] = List[Card]()) {
 
     override def toString:String = name
 
@@ -18,9 +16,13 @@ case class Player (name: String = "unknown", hand: List[Card] = List[Card]()) ex
 
     def playCard(card:Card):Player = Player(name, hand diff List(card))
 
-    override def getHand: List[Card] = hand
+    def getHand: List[Card] = hand
 
-    override def getName: String = name
+    def getName: String = name
+
+    def setName(name:String) :Player = Player(name, hand)
+
+    def setHand(cards: List[Card]) :Player = Player(name, cards)
 }
 
 
