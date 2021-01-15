@@ -1,111 +1,136 @@
 package de.htwg.se.wizard.model.FileIO.XML
 
 import de.htwg.se.wizard.model.FileIO.File_IO_Interface
-import de.htwg.se.wizard.model.cardsComponent.Card
+import de.htwg.se.wizard.model.cardsComponent.{Card, Card_with_value}
 import de.htwg.se.wizard.model.gamestateComponent.GamestateBaseImpl.{Gamestate, Round}
-import de.htwg.se.wizard.model.playerComponent._
+import de.htwg.se.wizard.model.gamestateComponent.GamestateInterface
+import de.htwg.se.wizard.model.playerComponent.PlayerBaseImpl.Player
 
+import scala.swing.event.Event
 import scala.xml._
 
-class Impl_XML extends File_IO_Interface {
-  override def load: Gamestate = ???
+case class Impl_XML() extends File_IO_Interface {
 
-  override def save(state: Gamestate): Unit = {
-    print(generate_XML(state))
-  scala.xml.XML.save("wizard.xml", generate_XML(state))
+  override def load: (GamestateInterface, String) = {
+    val file = scala.xml.XML.loadFile("gamestate.xml")
+
+    val players = file \\ "Player"
+    var player_list = List[Player]()
+    for (p <- players.indices) {
+      val name = (players(p)\ "name").text
+      var hand = List[Card]()
+      for (card <- players(p) \\ "Card") {
+        hand = hand.appended(new Card_with_value((card \ "value").text.strip().replace("\n", "").toInt, (card \ "color").text.strip().replace("\n", "")))
+      }
+      player_list = player_list.appended(Player(name, hand))
+    }
+
+    val round_number = (file \\"Wizard" \\ "Roundnumber"\ "value").text.strip().replace("\n", "").toInt
+
+    val rounds = file \\ "Round"
+    var gametable = List[Round]()
+    for (r <- rounds.indices) {
+      var tricks = List[Int]()
+      var result = List[Int]()
+      for (res <- players.indices) {
+        tricks = tricks.appended(((rounds(r) \\ "trick")(res)).text.strip().replace("\n", "").toInt)
+        if (r == round_number) {
+        } else {
+          result = result.appended(((rounds(r) \\ "value") (res)).text.strip().replace("\n", "").toInt)
+        }
+      }
+      gametable = gametable.appended(Round(tricks, result))
+    }
+
+    val made = file \\ "Made_tricks" \ "trick"
+    var made_tricks = List[Int]()
+    for (tr <- made.indices) {
+      made_tricks = made_tricks.appended(made(tr).text.strip().replace("\n", "").toInt)
+    }
+
+    val played = file \\ "Played_cards" \ "Card"
+    var played_cards = List[Card]()
+    for (card <- played.indices) {
+      played_cards = played_cards.appended(new Card_with_value((played(card) \\ "value").text.toInt, (played(card) \\ "color").text.strip().replace("\n", "")))
+    }
+
+    val state = (file \\"Wizard" \ "State").text
+    val active_player_idx = (file \\"Wizard" \\ "Active_player_idx" \"value").text.strip().replace("\n", "").toInt
+    val trump_card = new Card_with_value((file \\ "Trump_card" \"Card"\"value").text.strip().replace("\n", "").toInt, (file \\"Wizard" \\ "Trump_card" \"Card"\"color").text)
+    val serve_card = new Card_with_value((file \\ "Serve_card" \"Card"\"value").text.strip().replace("\n", "").toInt, (file \\"Wizard" \\ "Serve_card" \"Card"\"color").text)
+    print(trump_card + " ; " + serve_card)
+    val Mini_starter_idx = (file \\"Wizard" \\ "Mini_starter_idx").text.strip().replace("\n", "").toInt
+    val mini_played_counter = (file \\"Wizard" \\ "Mini_played_counter").text.strip().replace("\n", "").toInt
+    (Gamestate(players = player_list, game_table = gametable, round_number = round_number, trump_Card = trump_card,
+      serve_card = serve_card, made_tricks = made_tricks, playedCards = played_cards, mini_starter_idx = Mini_starter_idx,
+      mini_played_counter = mini_played_counter, active_Player_idx = active_player_idx),state)
   }
 
-  def generate_XML(game: Gamestate): Elem = {
+  override def save(gamestate: GamestateInterface, state: Event): Unit = scala.xml.XML.save("gamestate.xml", generate_XML(gamestate, state))
+
+  def generate_XML(game: GamestateInterface, state: Event): Elem = {
     <Wizard>
+      <State>{state.getClass.toString.replace("class de.htwg.se.wizard.control.controllerBaseImpl.", "")}</State>
       {gamestate_toXML(game)}
     </Wizard>
   }
 
-  def gamestate_toXML(game: Gamestate): Elem = {
+  def gamestate_toXML(game: GamestateInterface): Elem = {
     <Gamestate>
-      {players_toXML(game.players)}{gametabel_toXML(game.game_table)}<Roundnumber>
-      {value_toXML(game.round_number)}
-    </Roundnumber>
-      <Active_player_idx>
-        {value_toXML(game.active_Player_idx)}
-      </Active_player_idx>
-
-      <Trump_card>
-        {card_toXML(game.trump_Card)}
-      </Trump_card>
-      <Serve_card>
-        {card_toXML(game.serve_card)}
-      </Serve_card>
-      <Made_tricks>
-        {game.made_tricks.foreach(trick => trick_toXML(trick))}
-      </Made_tricks>
-      <Played_cards>
-        {game.playedCards.foreach(card => card_toXML(card))}
-      </Played_cards>
-      <Mini_starter_idx>
-        {game.mini_starter_idx.toString}
-      </Mini_starter_idx>
-      <Mini_played_counter>
-        {game.mini_played_counter}
-      </Mini_played_counter>
+      {players_toXML(game.getPlayers)}
+      {gametabel_toXML(game.getGame_table)}
+      <Roundnumber>{value_toXML(game.getRound_number)}</Roundnumber>
+      <Active_player_idx>{value_toXML(game.getActive_player_idx)}</Active_player_idx>
+      <Trump_card>{card_toXML(game.getTrump_card)}</Trump_card>
+      <Serve_card>{card_toXML(game.getServe_card)}</Serve_card>
+      <Made_tricks>{for (i <- game.getMade_tricks.indices) yield trick_toXML(game.getMade_tricks(i))}</Made_tricks>
+      <Played_cards>{for (i <- game.getPlayedCards.indices) yield card_toXML(game.getPlayedCards(i))}</Played_cards>
+      <Mini_starter_idx>{game.getMini_starter}</Mini_starter_idx>
+      <Mini_played_counter>{game.getMini_played_counter}</Mini_played_counter>
     </Gamestate>
   }
 
-  def players_toXML(players: List[PlayerInterface]): Elem = {
+  def players_toXML(players: List[Player]): Elem = {
     <Players>
-      {players.foreach(player => player_toXML(player))}
+      {for (i <- players.indices) yield player_toXML(players(i))}
     </Players>
   }
 
-//  def player_toXML(player: PlayerInterface): Elem = {
-//    <Player>
-//      <name>
-//        {player.getName}
-//      </name>
-//      <handcards>{cards_toXML(player.getHand)}</handcards>
-//    </Player>
-//
-//  }
-// Funktioniert sollte aber auch mit oben laufen
-//  def player_toXML(player: PlayerInterface): String = {
-//    val p = {"<Player>\n"+
-//      "<name>"+
-//      player.getName+
-//      "</name>"+
-//      //<handcards>{cards_toXML(player.getHand)}</handcards>
-//      "</Player>"}
-//    p
-//  }
+  def player_toXML(player: Player): Elem = {
+    <Player>
+      <name>{player.getName}</name>
+      <handcards>{cards_toXML(player.getHand)}</handcards>
+    </Player>
+  }
 
   def cards_toXML(cards: List[Card]): Elem = {
     <Cards>
-      {cards.foreach(card => card_toXML(card))}
+      {for (i <- cards.indices) yield card_toXML(cards(i))}
     </Cards>
   }
 
   def card_toXML(card: Card): Elem = {
     <Card>
-      <value>
-        {card.num}
-      </value>
-      <color>
-        {card.colour}
-      </color>
+      <value>{card.num}</value>
+      <color>{card.colour}</color>
     </Card>
   }
 
 
   def gametabel_toXML(game_table: List[Round]): Elem = {
     <Gametabel>
-      {game_table.foreach(round => round_toXML(round))}
+      {for (i <- game_table.indices) yield round_toXML(game_table(i))}
     </Gametabel>
   }
 
   def round_toXML(round: Round): Elem = {
     <Round>
       <Guessed_tricks>
-        {round.guessed_tricks.foreach(value => value_toXML(value))}
+        {for (i <- round.guessed_tricks.indices) yield trick_toXML(round.guessed_tricks(i))}
       </Guessed_tricks>
+      <Result>
+        {for (i <- round.results.indices) yield value_toXML(round.results(i))}
+      </Result>
     </Round>
   }
 
