@@ -39,12 +39,12 @@ class Impl_JSONTest extends AnyWordSpec {
         val trump_card = Cards.all_cards(16)
         val serve_card = Cards.all_cards(17)
         val made_tricks = List(0, 0, 0)
-        val played_Cards = List(Cards.all_cards(0))//Karte erzeugt ungültigen Gamestate -> bei Bedarf entfernen
+        //val played_Cards = List(Cards.all_cards(0))//Karte erzeugt ungültigen Gamestate -> bei Bedarf entfernen
         val mini_starter_idx = 1
         val mini_played_counter = 0
         val state = new Gamestate(players = players, game_table = game_table,
           round_number = round_number, active_Player_idx = active_player_idx,
-          trump_Card = trump_card, serve_card = serve_card, made_tricks = made_tricks, playedCards = played_Cards,
+          trump_Card = trump_card, serve_card = serve_card, made_tricks = made_tricks, //playedCards = played_Cards,
           mini_starter_idx = mini_starter_idx, mini_played_counter = mini_played_counter)
 
 
