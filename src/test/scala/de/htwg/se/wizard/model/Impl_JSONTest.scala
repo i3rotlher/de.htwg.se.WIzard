@@ -2,6 +2,7 @@
 package de.htwg.se.wizard.model
 
 import de.htwg.se.wizard.control.controllerBaseImpl._
+import de.htwg.se.wizard.model.FileIO.JSON.Impl_JSON
 import de.htwg.se.wizard.model.FileIO.XML.Impl_XML
 import de.htwg.se.wizard.model.cardsComponent.Cards
 import de.htwg.se.wizard.model.gamestateComponent.GamestateBaseImpl.{Gamestate, _}
@@ -14,7 +15,7 @@ class Impl_JSONTest extends AnyWordSpec {
   "an JSON" when {
     "saving an reloading the game" should {
       "have the same gamestate" in {
-        val json: FileIO.File_IO_Interface = new Impl_XML()
+        val json: FileIO.File_IO_Interface = new Impl_JSON()
         var game: GamestateInterface = Gamestate().set_player_amount(3)
         //Kartensätze
         val cards_player_1 = List(Cards.all_cards(4), Cards.all_cards(5), Cards.all_cards(6), Cards.all_cards(7))
