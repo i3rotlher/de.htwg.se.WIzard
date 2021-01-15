@@ -4,7 +4,6 @@ import de.htwg.se.wizard.model.FileIO.File_IO_Interface
 import de.htwg.se.wizard.model.cardsComponent.Card
 import de.htwg.se.wizard.model.gamestateComponent.GamestateInterface
 import de.htwg.se.wizard.model.playerComponent.PlayerBaseImpl.Player
-import de.htwg.se.wizard.util.UndoManager
 
 import scala.swing.Publisher
 import scala.swing.event.Event
@@ -27,7 +26,7 @@ trait ControllerInteface extends Publisher{
     def redo_player(): Unit
     def getGamestate(): GamestateInterface
     def setGamestate(gamestate: GamestateInterface): Unit
-    val undoManager = new UndoManager()
+    val undoManager = new de.htwg.se.wizard.util.UndoManager()
     val file_io: File_IO_Interface
     def load(): Unit
     def save(state: Event): Unit

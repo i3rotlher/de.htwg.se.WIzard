@@ -3,7 +3,6 @@ package de.htwg.se.wizard.model
 
 import de.htwg.se.wizard.control.controllerBaseImpl._
 import de.htwg.se.wizard.model.FileIO.JSON.Impl_JSON
-import de.htwg.se.wizard.model.FileIO.XML.Impl_XML
 import de.htwg.se.wizard.model.cardsComponent.Cards
 import de.htwg.se.wizard.model.gamestateComponent.GamestateBaseImpl.{Gamestate, _}
 import de.htwg.se.wizard.model.gamestateComponent.GamestateInterface
@@ -47,11 +46,11 @@ class Impl_JSONTest extends AnyWordSpec {
           trump_Card = trump_card, serve_card = serve_card, made_tricks = made_tricks, //playedCards = played_Cards,
           mini_starter_idx = mini_starter_idx, mini_played_counter = mini_played_counter)
 
-
-        //schreiben
-        json.save(state, new next_guess)
+        val controller = new Controller(state, json)
+        controller.save(new next_guess)
+        controller.load()
         //lesen
-        state shouldBe json.load._1
+        state shouldBe controller.game
       }
     }
   }

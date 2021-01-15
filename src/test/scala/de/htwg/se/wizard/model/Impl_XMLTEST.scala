@@ -45,10 +45,11 @@ class Impl_XMLTEST extends AnyWordSpec {
           mini_starter_idx = mini_starter_idx, mini_played_counter = mini_played_counter)
 
 
-        //schreiben
-        xml.save(state, new next_guess)
+        val controller = new Controller(state, xml)
+        controller.save(new next_guess)
+        controller.load()
         //lesen
-        state shouldBe xml.load._1
+        state shouldBe controller.game
       }
     }
   }
