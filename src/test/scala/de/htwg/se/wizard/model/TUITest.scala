@@ -12,7 +12,7 @@ import scala.util.Success
 class TUITest extends AnyWordSpec {
   "The TUI" should {
 
-    val controller = new Controller(Gamestate())
+    val controller = new Controller(Gamestate(), null)
     controller.set_player_amount(Some(3))
     val tui = new TUI(controller)
 

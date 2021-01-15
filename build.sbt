@@ -11,3 +11,6 @@ libraryDependencies += "org.scala-lang.modules" %% "scala-swing" % "3.0.0"
 
 libraryDependencies += "com.google.inject" % "guice" % "4.2.0"
 libraryDependencies += "net.codingwell" %% "scala-guice" % "4.2.11"
+
+libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "1.3.0"
+libraryDependencies += "com.typesafe.play" %% "play-json" % "2.8.0"

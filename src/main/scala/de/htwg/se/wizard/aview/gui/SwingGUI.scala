@@ -27,7 +27,7 @@ class SwingGUI(controller: ControllerInteface) extends Frame {
     case event: Wizard_trump => wizard_trump(); event
     case event: set_Wizard_trump => state = event
     case event: player_create =>
-      set_name(controller.active_player_idx()+1)
+      set_name(controller.active_player_idx() + 1)
       state = event
     case event: next_guess =>
       guess()
@@ -45,8 +45,14 @@ class SwingGUI(controller: ControllerInteface) extends Frame {
       println("Game Over!")
       println(controller.getGamestate().calc_total())
       state = event
-    case ButtonClicked(b) => println(b.name);processInput(b.name)
-      //Zähler einbauen -> doppelte ausführung vermeiden
+    case ButtonClicked(b) =>
+      if (b.name == "load") {
+        controller.load()
+      } else if (b.name == "save") {
+        controller.save(state)
+      } else {
+        println(b.name);processInput(b.name)
+      }
     case EditDone(s) => if (s.text != "Enter your name here ..." && s.text != "Enter your guess here ..." && s.text != "Enter your cardnumber here ...") {
       println(s.text)
       processInput(s.text)
@@ -80,15 +86,20 @@ class SwingGUI(controller: ControllerInteface) extends Frame {
       val button6 = new Button("6 Players"){
         name = "6"
       }
+      val buttonload = new Button("Load Game"){
+        name = "load"
+      }
       contents+=button3
       contents+=button4
       contents+=button5
       contents+=button6
+      contents+=buttonload
     }
     listenTo(amount_panel.button3)
     listenTo(amount_panel.button4)
     listenTo(amount_panel.button5)
     listenTo(amount_panel.button6)
+    listenTo(amount_panel.buttonload)
 
     contents = amount_panel
     controller.publish(new get_Amount)
@@ -170,6 +181,7 @@ class SwingGUI(controller: ControllerInteface) extends Frame {
 
   var set_guess_panel = new FlowPanel {
     var text_field = new TextField("Enter your guess here ...", 14)
+    var save_button = new Button("Save Game") {name = "save"}
     contents+=text_field
   }
 
@@ -182,6 +194,9 @@ class SwingGUI(controller: ControllerInteface) extends Frame {
       val hand_label = new Label("Your cards:")
       var hand = new Hand_panel(controller.getGamestate().getPlayers(controller.active_player_idx()).getHand)
       var text_field = new TextField("Enter your guess here ...", 14)
+      var save_button = new Button("Save Game") {
+        name = "save"
+      }
 
       contents+=label
       contents+=trump_label
@@ -189,8 +204,10 @@ class SwingGUI(controller: ControllerInteface) extends Frame {
       contents+=hand_label
       contents+=hand
       contents+=text_field
+      contents+=save_button
     }
     listenTo(set_guess_panel.text_field)
+    listenTo(set_guess_panel.save_button)
     contents = new BorderPanel {
       add(set_guess_panel, BorderPanel.Position.Center)
       add(new Table_panel(controller.getGamestate()), BorderPanel.Position.East)
@@ -235,19 +252,19 @@ class SwingGUI(controller: ControllerInteface) extends Frame {
 
   // ------------------------------------------------------------------------------------------
 
-    val set_name_panel = new FlowPanel {
-      val label = new Label("Player " + "X" + " whats your Name ?")
-      contents += label
-      val text_field = new TextField("Enter your name here ...", 14)
-      val undo_previous = new Button("\u2190") {
-        name = "r"
-      }
-      val redo_change = new Button("\u2192") {
-        name = "y"
-      }
-      contents += undo_previous
-      contents += text_field
-      contents += redo_change
+  val set_name_panel = new FlowPanel {
+    val label = new Label("Player " + "X" + " whats your Name ?")
+    contents += label
+    val text_field = new TextField("Enter your name here ...", 14)
+    val undo_previous = new Button("\u2190") {
+      name = "r"
+    }
+    val redo_change = new Button("\u2192") {
+      name = "y"
+    }
+    contents += undo_previous
+    contents += text_field
+    contents += redo_change
   }
 
   listenTo(set_name_panel.undo_previous)
@@ -281,17 +298,17 @@ class SwingGUI(controller: ControllerInteface) extends Frame {
   }
 
   def start_round() : Unit = {
-//    println("- - - - - Round " + (controller.game.round_number+1) + " started - - - - -")
-//    println("Generating hands . . .")
-//    println("Generating trumpcard . . .\n\n\n")
+    //    println("- - - - - Round " + (controller.game.round_number+1) + " started - - - - -")
+    //    println("Generating hands . . .")
+    //    println("Generating trumpcard . . .\n\n\n")
   }
 
   def check_trump_wish(input: String): Boolean = {
-//    if(!List("red","green","blue","yellow").contains(input)) {
-//      println("You may only choose one of these colors red,blue,yellow,green")
-//      return false
-//    }
-//    controller.wish_trump(input)
+    //    if(!List("red","green","blue","yellow").contains(input)) {
+    //      println("You may only choose one of these colors red,blue,yellow,green")
+    //      return false
+    //    }
+    //    controller.wish_trump(input)
     true
   }
 

@@ -5,10 +5,12 @@ import de.htwg.se.wizard.control.ControllerInteface
 import de.htwg.se.wizard.model.cardsComponent.{Card, Cards}
 import de.htwg.se.wizard.model.gamestateComponent.GamestateInterface
 import de.htwg.se.wizard.model.playerComponent.PlayerBaseImpl.Player
+import de.htwg.se.wizard.model.FileIO.File_IO_Interface
 
 import scala.swing.Publisher
+import scala.swing.event.Event
 
-case class Controller @Inject() (var game: GamestateInterface) extends ControllerInteface with Publisher {
+case class Controller @Inject() (var game: GamestateInterface, file_io: File_IO_Interface) extends ControllerInteface with Publisher {
 
   def setGamestate(gamestate: GamestateInterface): Unit = game = gamestate
 
@@ -134,4 +136,31 @@ case class Controller @Inject() (var game: GamestateInterface) extends Controlle
   }
 
   override def getGamestate(): GamestateInterface = game
+
+  override def load(): Unit = {
+    val game_state = file_io.load
+    game = game_state._1
+
+    game_state._2 match {
+      case "name_ok" => publish(new name_ok)
+      case "set_Wizard_trump" => publish(new set_Wizard_trump)
+      case "game_started" => publish(new game_started)
+      case "get_Amount" => publish(new get_Amount)
+      case "player_create" => publish(new player_create)
+      case "round_started" => publish(new round_started)
+      case "start_round" => publish(new start_round)
+      case "Wizard_trump" => publish(new Wizard_trump)
+      case "next_guess" => publish(new next_guess)
+      case "next_player_card" => publish(new next_player_card)
+      case "round_over" => publish(new round_over)
+      case "card_not_playable" => publish(new card_not_playable)
+      case "guesses_set" => publish(new guesses_set)
+      case "mini_over" => publish(new mini_over)
+      case "game_over" => publish(new game_over)
+      case _ => println(game_state._2)
+    }
+  }
+
+  override def save(state: Event): Unit = file_io.save(game, state)
 }
+

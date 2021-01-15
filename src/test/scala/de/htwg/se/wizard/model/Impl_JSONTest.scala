@@ -1,18 +1,20 @@
+
 package de.htwg.se.wizard.model
+
 import de.htwg.se.wizard.control.controllerBaseImpl._
 import de.htwg.se.wizard.model.FileIO.XML.Impl_XML
-import de.htwg.se.wizard.model.cardsComponent.{Cards, _}
+import de.htwg.se.wizard.model.cardsComponent.Cards
 import de.htwg.se.wizard.model.gamestateComponent.GamestateBaseImpl.{Gamestate, _}
 import de.htwg.se.wizard.model.gamestateComponent.GamestateInterface
 import de.htwg.se.wizard.model.playerComponent.PlayerBaseImpl.Player
 import org.scalatest.matchers.should.Matchers._
 import org.scalatest.wordspec.AnyWordSpec
 
-class Impl_XMLTEST extends AnyWordSpec {
-  "an XML" when{
-    "saving an reloading the game" should{
-      "have the same gamestate " in {
-        val xml: FileIO.File_IO_Interface = new Impl_XML()
+class Impl_JSONTest extends AnyWordSpec {
+  "an JSON" when {
+    "saving an reloading the game" should {
+      "have the same gamestate" in {
+        val json: FileIO.File_IO_Interface = new Impl_XML()
         var game: GamestateInterface = Gamestate().set_player_amount(3)
         //Kartensätze
         val cards_player_1 = List(Cards.all_cards(4), Cards.all_cards(5), Cards.all_cards(6), Cards.all_cards(7))
@@ -36,7 +38,7 @@ class Impl_XMLTEST extends AnyWordSpec {
         val trump_card = Cards.all_cards(16)
         val serve_card = Cards.all_cards(17)
         val made_tricks = List(0, 0, 0)
-        val played_Cards = List[Card](Cards.all_cards(0))//Karte erzeugt ungültigen Gamestate -> bei Bedarf entfernen
+        val played_Cards = List(Cards.all_cards(0))//Karte erzeugt ungültigen Gamestate -> bei Bedarf entfernen
         val mini_starter_idx = 1
         val mini_played_counter = 0
         val state = new Gamestate(players = players, game_table = game_table,
@@ -46,10 +48,12 @@ class Impl_XMLTEST extends AnyWordSpec {
 
 
         //schreiben
-        xml.save(state, new next_guess)
+        json.save(state, new next_guess)
         //lesen
-        state shouldBe xml.load._1
+        state shouldBe json.load._1
       }
     }
   }
 }
+
+
