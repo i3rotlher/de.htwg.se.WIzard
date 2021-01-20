@@ -1,6 +1,6 @@
 package de.htwg.se.wizard.aview
 import de.htwg.se.wizard.control._
-import de.htwg.se.wizard.control.controllerBaseImpl.{Controller, Wizard_trump, card_not_playable, game_over, game_started, get_Amount, mini_over, name_ok, next_guess, next_player_card, player_create, round_over, set_Wizard_trump, start_round}
+import de.htwg.se.wizard.control.controllerBaseImpl._
 
 import scala.swing.Reactor
 import scala.swing.event.Event
@@ -12,10 +12,10 @@ class TUI(controller: ControllerInteface) extends Reactor {
   var state: Event = new game_started
 
   reactions+= {
-      case event: game_started => game_start(); event
+      case event: game_started => game_start()
       case event: get_Amount => state = event
-      case event: start_round => start_round(); event
-      case event: Wizard_trump => wizard_trump(); event
+      case event: start_round => start_round()
+      case event: Wizard_trump => wizard_trump()
       case event: set_Wizard_trump => state = event
       case event: player_create =>
         println("Player " + (controller.active_player_idx()+1) + " whats your name ? / press r to undo previous name / press y to redo change")
@@ -28,11 +28,11 @@ class TUI(controller: ControllerInteface) extends Reactor {
         play_card()
         state = event
       case event: card_not_playable =>
-        println("This card is not playable right now!\n Choose a different number!"); event
+        println("This card is not playable right now!\n Choose a different number!")
       case event: mini_over =>
-        println("Trick won by " + controller.get_mini_winner().getName + "!"); event
+        println("Trick won by " + controller.get_mini_winner().getName + "!")
       case event: round_over =>
-        println(controller.getGamestate().getGame_table); event
+        println(controller.getGamestate().getGame_table)
       case event: game_over =>
         println("Game Over!")
         println(controller.getGamestate().calc_total())

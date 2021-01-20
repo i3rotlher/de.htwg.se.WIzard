@@ -21,10 +21,10 @@ class SwingGUI(controller: ControllerInteface) extends Frame {
   var state: Event = new game_started
 
   reactions+= {
-    case event: game_started => game_start(); event
+    case event: game_started => game_start()
     case event: get_Amount => state = event
-    case event: start_round => start_round(); event
-    case event: Wizard_trump => wizard_trump(); event
+    case event: start_round => start_round()
+    case event: Wizard_trump => wizard_trump()
     case event: set_Wizard_trump => state = event
     case event: player_create =>
       set_name(controller.active_player_idx() + 1)
@@ -36,11 +36,11 @@ class SwingGUI(controller: ControllerInteface) extends Frame {
       play_card()
       state = event
     case event: card_not_playable =>
-      println("This card is not playable right now!\n Choose a different number!"); event
+      println("This card is not playable right now!\n Choose a different number!");
     case event: mini_over =>
-      println("Trick won by " + controller.get_mini_winner().getName + "!"); event
+      println("Trick won by " + controller.get_mini_winner().getName + "!");
     case event: round_over =>
-      println(controller.getGamestate().getGame_table); event
+      println(controller.getGamestate().getGame_table);
     case event: game_over =>
       println("Game Over!")
       println(controller.getGamestate().calc_total())

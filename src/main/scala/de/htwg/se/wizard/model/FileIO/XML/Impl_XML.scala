@@ -20,12 +20,12 @@ case class Impl_XML() extends File_IO_Interface {
       val name = (players(p)\ "name").text
       var hand = List[Card]()
       for (card <- players(p) \\ "Card") {
-        hand = hand.appended(new Card_with_value((card \ "value").text.strip().replace("\n", "").toInt, (card \ "color").text.strip().replace("\n", "")))
+        hand = hand.appended(new Card_with_value((card \ "value").text.trim().replace("\n", "").toInt, (card \ "color").text.trim().replace("\n", "")))
       }
       player_list = player_list.appended(Player(name, hand))
     }
 
-    val round_number = (file \\"Wizard" \\ "Roundnumber"\ "value").text.strip().replace("\n", "").toInt
+    val round_number = (file \\"Wizard" \\ "Roundnumber"\ "value").text.trim().replace("\n", "").toInt
 
     val rounds = file \\ "Round"
     var gametable = List[Round]()
@@ -33,10 +33,10 @@ case class Impl_XML() extends File_IO_Interface {
       var tricks = List[Int]()
       var result = List[Int]()
       for (res <- players.indices) {
-        tricks = tricks.appended(((rounds(r) \\ "trick")(res)).text.strip().replace("\n", "").toInt)
+        tricks = tricks.appended(((rounds(r) \\ "trick")(res)).text.trim().replace("\n", "").toInt)
         if (r == round_number) {
         } else {
-          result = result.appended(((rounds(r) \\ "value") (res)).text.strip().replace("\n", "").toInt)
+          result = result.appended(((rounds(r) \\ "value") (res)).text.trim().replace("\n", "").toInt)
         }
       }
       gametable = gametable.appended(Round(tricks, result))
@@ -45,22 +45,22 @@ case class Impl_XML() extends File_IO_Interface {
     val made = file \\ "Made_tricks" \ "trick"
     var made_tricks = List[Int]()
     for (tr <- made.indices) {
-      made_tricks = made_tricks.appended(made(tr).text.strip().replace("\n", "").toInt)
+      made_tricks = made_tricks.appended(made(tr).text.trim().replace("\n", "").toInt)
     }
 
     val played = file \\ "Played_cards" \ "Card"
     var played_cards = List[Card]()
     for (card <- played.indices) {
-      played_cards = played_cards.appended(new Card_with_value((played(card) \\ "value").text.toInt, (played(card) \\ "color").text.strip().replace("\n", "")))
+      played_cards = played_cards.appended(new Card_with_value((played(card) \\ "value").text.toInt, (played(card) \\ "color").text.trim().replace("\n", "")))
     }
 
     val state = (file \\"Wizard" \ "State").text
-    val active_player_idx = (file \\"Wizard" \\ "Active_player_idx" \"value").text.strip().replace("\n", "").toInt
-    val trump_card = new Card_with_value((file \\ "Trump_card" \"Card"\"value").text.strip().replace("\n", "").toInt, (file \\"Wizard" \\ "Trump_card" \"Card"\"color").text)
-    val serve_card = new Card_with_value((file \\ "Serve_card" \"Card"\"value").text.strip().replace("\n", "").toInt, (file \\"Wizard" \\ "Serve_card" \"Card"\"color").text)
+    val active_player_idx = (file \\"Wizard" \\ "Active_player_idx" \"value").text.trim().replace("\n", "").toInt
+    val trump_card = new Card_with_value((file \\ "Trump_card" \"Card"\"value").text.trim().replace("\n", "").toInt, (file \\"Wizard" \\ "Trump_card" \"Card"\"color").text)
+    val serve_card = new Card_with_value((file \\ "Serve_card" \"Card"\"value").text.trim().replace("\n", "").toInt, (file \\"Wizard" \\ "Serve_card" \"Card"\"color").text)
     print(trump_card + " ; " + serve_card)
-    val Mini_starter_idx = (file \\"Wizard" \\ "Mini_starter_idx").text.strip().replace("\n", "").toInt
-    val mini_played_counter = (file \\"Wizard" \\ "Mini_played_counter").text.strip().replace("\n", "").toInt
+    val Mini_starter_idx = (file \\"Wizard" \\ "Mini_starter_idx").text.trim().replace("\n", "").toInt
+    val mini_played_counter = (file \\"Wizard" \\ "Mini_played_counter").text.trim().replace("\n", "").toInt
     (Gamestate(players = player_list, game_table = gametable, round_number = round_number, trump_Card = trump_card,
       serve_card = serve_card, made_tricks = made_tricks, playedCards = played_cards, mini_starter_idx = Mini_starter_idx,
       mini_played_counter = mini_played_counter, active_Player_idx = active_player_idx),state)
