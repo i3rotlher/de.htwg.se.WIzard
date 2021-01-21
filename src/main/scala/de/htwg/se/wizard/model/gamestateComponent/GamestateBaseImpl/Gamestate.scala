@@ -1,10 +1,14 @@
-package de.htwg.se.wizard.model
+package de.htwg.se.wizard.model.gamestateComponent.GamestateBaseImpl
 
+import de.htwg.se.wizard.model.cardsComponent.{Card, Card_with_value, Cards}
+import de.htwg.se.wizard.model.gamestateComponent.GamestateInterface
+import de.htwg.se.wizard.model.playerComponent.PlayerBaseImpl.Player
+import de.htwg.se.wizard.util.PlayerStrategy
 
-case class Gamestate(players: List[Player] = List(), game_table: List[Round] = List(), round_number: Int = 0,
-                     active_Player_idx: Int = 0, trump_Card: Card = Cards.all_cards(0), serve_card: Card = Cards.all_cards(0),
-                     made_tricks: List[Int] = List(), playedCards: List[Card] = List(), mini_starter_idx: Int = 0,
-                     mini_played_counter: Int = 0) extends PlayerStrategy {
+case class Gamestate (players: List[Player] = List(), game_table: List[Round] = List(), round_number: Int = 0,
+                      active_Player_idx: Int = 0, trump_Card: Card = Cards.all_cards(0), serve_card: Card = Cards.all_cards(0),
+                      made_tricks: List[Int] = List(), playedCards: List[Card] = List(), mini_starter_idx: Int = 0,
+                      mini_played_counter: Int = 0) extends GamestateInterface with PlayerStrategy {
 
   def round_finished(made: Iterable[Int]): Gamestate = {
     val finished_round = game_table.last.madeTricks(made)
@@ -35,7 +39,8 @@ case class Gamestate(players: List[Player] = List(), game_table: List[Round] = L
     var n_playerList = players
     for (i <- players.indices) {
       tmpCard_Tuple = Cards.generateHand(round_number + 1, tmpCard_Tuple._2)
-      n_playerList = n_playerList.updated(i, Player(players(i).name, tmpCard_Tuple._1))
+      val player = Player(players(i).getName).setHand(tmpCard_Tuple._1)
+      n_playerList = n_playerList.updated(i, player)
     }
     copy(players = n_playerList, active_Player_idx = round_number % players.size, game_table = game_table.appended(Round(List.fill(players.size) {
       0
@@ -55,7 +60,7 @@ case class Gamestate(players: List[Player] = List(), game_table: List[Round] = L
   def set_Trump_card(player: List[Player], round_nr: Int): Gamestate = {
     var usedCards = List[Card]()
     for (i <- player) {
-      usedCards = usedCards.appendedAll(i.hand)
+      usedCards = usedCards.appendedAll(i.getHand)
     }
     var trump = Cards.all_cards(0)
     if ((round_nr + 1) != (60 / players.size)) {
@@ -80,6 +85,8 @@ case class Gamestate(players: List[Player] = List(), game_table: List[Round] = L
   def set_player_amount(amount: Int): Gamestate = {
     strategy(amount)
   }
+
+  def set_active_player_idx(idx: Int): Gamestate = copy(active_Player_idx = idx)
 
 
   override def strategy(amount_of_players: Int): Gamestate = {
@@ -113,17 +120,27 @@ case class Gamestate(players: List[Player] = List(), game_table: List[Round] = L
     copy(players = List.fill(6)(Player()), made_tricks = List.fill(6) {0})
   }
 
-}
+  override def getMini_played_counter: Int = mini_played_counter
 
-abstract class PlayerStrategy() {
-  def strategy(amount_of_players: Int): Gamestate
+  override def getMini_starter: Int = mini_starter_idx
 
-  def strategy_3_players(): Gamestate
+  override def getPlayedCards: List[Card] = playedCards
 
-  def strategy_4_players(): Gamestate
+  override def getMade_tricks: List[Int] = made_tricks
 
-  def strategy_5_players(): Gamestate
+  override def getServe_card: Card = serve_card
 
-  def strategy_6_players(): Gamestate
+  override def getTrump_card: Card = trump_Card
 
+  override def getPlayers: List[Player] = players
+
+  override def getGame_table: List[Round] = game_table
+
+  override def getRound_number: Int = round_number
+
+  override def getActive_player_idx: Int = active_Player_idx
+
+  override def reset_player(): Gamestate = {
+    copy(players = players.updated(active_Player_idx-1 ,Player()), active_Player_idx = active_Player_idx-1)
+  }
 }

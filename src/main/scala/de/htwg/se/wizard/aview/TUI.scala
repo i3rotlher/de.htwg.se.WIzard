@@ -1,52 +1,52 @@
 package de.htwg.se.wizard.aview
-import de.htwg.se.wizard.util.Observer
-import de.htwg.se.wizard.control.{Controller, State}
+import de.htwg.se.wizard.control._
+import de.htwg.se.wizard.control.controllerBaseImpl._
 
+import scala.swing.Reactor
+import scala.swing.event.Event
 import scala.util.{Failure, Success, Try}
 
-class TUI(controller: Controller) extends Observer{
+class TUI(controller: ControllerInteface) extends Reactor {
 
-  controller.add(this)
-  var state: State.Value = State.game_started
+  listenTo(controller)
+  var state: Event = new game_started
 
-  override def update(status: State.Value): Boolean = {
-    status match {
-      case State.game_started => game_start();true
-      case State.get_Amount => state = status;true
-      case State.start_round => start_round();true
-      case State.Wizard_trump => wizard_trump();true
-      case State.set_Wizard_trump => state = status;true
-      case State.player_create =>
+  reactions+= {
+      case event: game_started => game_start()
+      case event: get_Amount => state = event
+      case event: start_round => start_round()
+      case event: Wizard_trump => wizard_trump()
+      case event: set_Wizard_trump => state = event
+      case event: player_create =>
         println("Player " + (controller.active_player_idx()+1) + " whats your name ? / press r to undo previous name / press y to redo change")
-        state = status;true
-      case State.name_ok => state = status; true
-      case State.next_guess =>
+        state = event
+      case event: name_ok => state = event
+      case event: next_guess =>
         guess()
-        state = status;true
-      case State.next_player_card =>
+        state = event
+      case event: next_player_card =>
         play_card()
-        state = status;true
-      case State.card_not_playable =>
-        println("This card is not playable right now!\n Choose a different number!");true
-      case State.mini_over =>
-        println("Trick won by " + controller.get_mini_winner().name + "!");true
-      case State.round_over =>
-        println(controller.game.game_table);true
-      case State.game_over =>
+        state = event
+      case event: card_not_playable =>
+        println("This card is not playable right now!\n Choose a different number!")
+      case event: mini_over =>
+        println("Trick won by " + controller.get_mini_winner().getName + "!")
+      case event: round_over =>
+        println(controller.getGamestate().getGame_table)
+      case event: game_over =>
         println("Game Over!")
-        println(controller.game.calc_total())
-        state = status;true
-      case _ => println("update state unimplemented: " + state );true
-    }
+        println(controller.getGamestate().calc_total())
+        state = event
+      case _ => println("tui event unimplemented!")
   }
 
   def processInput(input: String) : Unit = {
     state match {
-      case State.get_Amount => check_Amount(input)
-      case State.player_create => create_player(input)
-      case State.set_Wizard_trump => check_trump_wish(input)
-      case State.next_guess => get_guess(input)
-      case State.next_player_card => get_card(input)
+      case event: get_Amount => check_Amount(input)
+      case event: player_create => create_player(input)
+      case event: set_Wizard_trump => check_trump_wish(input)
+      case event: next_guess => get_guess(input)
+      case event: next_player_card => get_card(input)
       case _ => println("state unimplemented: " + state)
     }
   }
@@ -54,7 +54,7 @@ class TUI(controller: Controller) extends Observer{
   def game_start(): Unit = {
     println("Welcome to Wizard!")
     println("How many players want to play ? [3,4,5 or 6]")
-    controller.notify_Observer(State.get_Amount)
+    controller.publish(new get_Amount)
   }
 
   def check_Amount(input: String): Int = {
@@ -75,7 +75,7 @@ class TUI(controller: Controller) extends Observer{
   }
 
   def start_round() : Unit = {
-    println("- - - - - Round " + (controller.game.round_number+1) + " started - - - - -")
+    println("- - - - - Round " + (controller.getGamestate().getRound_number+1) + " started - - - - -")
     println("Generating hands . . .")
     println("Generating trumpcard . . .\n\n\n")
   }
@@ -83,7 +83,7 @@ class TUI(controller: Controller) extends Observer{
   def wizard_trump(): Unit = {
     println("A wizard has been drawn as the trump card!")
     val player = controller.get_player((controller.active_player_idx()-1+controller.player_amount())%controller.player_amount())
-    println(player.name + " which color do you want to be trump? [red,blue,yellow,green]")
+    println(player.getName + " which color do you want to be trump? [red,blue,yellow,green]")
     println("Your cards: " + player.showHand())
   }
 
@@ -98,8 +98,8 @@ class TUI(controller: Controller) extends Observer{
 
   def guess(): Unit = {
     val active_player = controller.get_player(controller.active_player_idx())
-    println("Trump card: " + controller.game.trump_Card)
-    println(active_player.name + " how many tricks are you going to make?")
+    println("Trump card: " + controller.getGamestate().getTrump_card)
+    println(active_player.getName + " how many tricks are you going to make?")
     println(active_player.showHand()+"\n\n\n\n\n")
   }
 
@@ -122,21 +122,21 @@ class TUI(controller: Controller) extends Observer{
 
   def play_card(): Unit = {
     val active_player = controller.get_player(controller.active_player_idx())
-    println("Trump card: " + controller.game.trump_Card)
-    println(active_player.name + " which card do you want to play ?")
+    println("Trump card: " + controller.getGamestate().getTrump_card)
+    println(active_player.getName + " which card do you want to play ?")
     println("Your cards: " + active_player.showHand()+"\n\n\n\n\n")
   }
 
   def get_card(input: String): Unit = {
     val active_player = controller.get_player(controller.active_player_idx())
     var list = List[String]()
-    for (x <- 1 to active_player.hand.size) {
+    for (x <- 1 to active_player.getHand.size) {
       list = list :+ x.toString
     }
     if (!list.contains(input)) {
       println("Insert a valid card number!")
     } else {
-      controller.play_card(active_player.hand(input.toInt-1))
+      controller.play_card(active_player.getHand(input.toInt-1))
     }
   }
 }

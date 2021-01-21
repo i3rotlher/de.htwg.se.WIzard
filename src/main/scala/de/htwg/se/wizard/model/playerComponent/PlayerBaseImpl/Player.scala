@@ -1,4 +1,6 @@
-package de.htwg.se.wizard.model
+package de.htwg.se.wizard.model.playerComponent.PlayerBaseImpl
+
+import de.htwg.se.wizard.model.cardsComponent.Card
 
 case class Player (name: String = "unknown", hand: List[Card] = List[Card]()) {
 
@@ -13,6 +15,14 @@ case class Player (name: String = "unknown", hand: List[Card] = List[Card]()) {
     }
 
     def playCard(card:Card):Player = Player(name, hand diff List(card))
+
+    def getHand: List[Card] = hand
+
+    def getName: String = name
+
+    def setName(name:String) :Player = Player(name, hand)
+
+    def setHand(cards: List[Card]) :Player = Player(name, cards)
 }
 
 
