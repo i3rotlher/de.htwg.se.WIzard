@@ -1,5 +1,5 @@
 # de.htwg.se.Wizard
-This is a card game. The goal is to predict the tricks you are going to make each round. The original game by amigoo can be found here:
+This is a card game. The goal is to predict the tricks you are going to make each round. The original game by amigo can be found here:
 https://www.amigo-spiele.de/spiel/wizard
 
 [![Build Status](https://travis-ci.org/i3rotlher/de.htwg.se.Wizard.svg?branch=master)](https://travis-ci.org/i3rotlher/de.htwg.se.Wizard)
