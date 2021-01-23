@@ -5,6 +5,8 @@ https://www.amigo-spiele.de/spiel/wizard
 [![Build Status](https://travis-ci.org/i3rotlher/de.htwg.se.Wizard.svg?branch=master)](https://travis-ci.org/i3rotlher/de.htwg.se.Wizard)
 [![Coverage Status](https://coveralls.io/repos/github/i3rotlher/de.htwg.se.Wizard/badge.svg?branch=master)](https://coveralls.io/github/i3rotlher/de.htwg.se.Wizard?branch=master)
 
+## Rules
+
 The objective of the game is to bid correctly on the number of tricks that a player will take in the subsequent round of play. Points are awarded for a correct bid and subtracted for an incorrect bid. The player with most points after all rounds have been played is the winner. The game is played in a number of rounds from 10 to 20, depending on the number of players and each round consists of three stages: Dealing, Bidding, and Playing.
 
 In the first round every player gets one card. In the subsequent rounds the number of cards is increased by one until all cards are distributed. That means that three players play 20 rounds, four players 15 rounds, five players 12 rounds and six players 10 rounds. The top card of the remaining cards is turned over to determine the trump suit. If there are no cards left or a jester is turned, there is no trump suit, and only the wizards are trump. If a wizard is turned, the dealer picks a trump suit.
