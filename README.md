@@ -1,4 +1,4 @@
-# de.htwg.se.Wizard
+# Wizard
 This is a card game. The goal is to predict the tricks you are going to make each round. The original game by amigo can be found here:
 https://www.amigo-spiele.de/spiel/wizard
 
