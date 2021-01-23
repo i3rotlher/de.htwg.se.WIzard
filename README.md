@@ -17,5 +17,5 @@ The player to the left of the dealer plays a card, and then the others follow cl
 At the end of each round, each player is given a score based on his performance. For predicting the number of tricks taken correctly, a player receives 20 points plus 10 points for each trick taken. For predicting the number of tricks taken incorrectly, a player loses 10 points for each trick over or under.
 [https://en.wikipedia.org/w/index.php?title=Wizard_(card_game)&oldid=975588038]
 
-##The GraphicalUserInterface
+## The GraphicalUserInterface
 ![the gui](pic/gui.png)
