@@ -4,6 +4,7 @@ import de.htwg.se.wizard.aview.TUI
 import de.htwg.se.wizard.aview.gui.SwingGUI
 import de.htwg.se.wizard.control.controllerBaseImpl.{Controller, game_over, game_started}
 
+//comment
 
 object Wizard {
 
